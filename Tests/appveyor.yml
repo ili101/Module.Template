@@ -1,0 +1,20 @@
+# version format
+version: 1.0.{build}
+
+# Build worker image (VM template)
+image: WMF 5
+
+# scripts that run after cloning repository
+install:
+- ps: choco install pester --prerelease
+
+# to disable automatic builds
+build: off
+
+# to run your custom scripts instead of automatic tests
+test_script:
+- ps: Invoke-Pester -EnableExit
+
+# Including commits with particular message or from specific user
+only_commits:
+  message: /build/                # Start a new build if message contains 'build'
