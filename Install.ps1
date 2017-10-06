@@ -59,4 +59,3 @@ Catch
 {
     throw ("Failed installing the module '{0}': {1} in Line {2}" -f $ModuleName, $_, $_.InvocationInfo.ScriptLineNumber)
 }
-
