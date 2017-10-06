@@ -2,15 +2,31 @@
 Param (
     [ValidateNotNullOrEmpty()]
     [String]$ModuleName,
-    [ValidateScript({
-                Test-Path -Path $_ -Type Container
-    })]
-    [String]$ModulePath = ($Env:PSModulePath -split ';')[0]
+
+    [ValidateNotNullOrEmpty()]
+    [String]$ModulePath,
+
+    [ValidateSet('CurrentUser','AllUsers')]
+    [string]
+    $Scope = 'CurrentUser'
 )
 
 Try 
 {
-    Write-Verbose -Message "$ModuleName module installation started"
+    Write-Verbose -Message 'Module installation started'
+
+    if (!$ModulePath)
+    {
+        if ($Scope -eq 'CurrentUser')
+        {
+            $ModulePath = ($Env:PSModulePath -split ';')[0]
+        }
+        else
+        {
+            $ModulePath = ($Env:PSModulePath -split ';')[1]
+        }
+    }
+    
 
     $Files = @(
         '*.dll', 
@@ -22,14 +38,7 @@ Try
         'Install.ps1'
     )
     $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension((Get-ChildItem -File -Filter *.psm1 -Name -Path $PSScriptRoot))
-}
-Catch 
-{
-    throw "Failed installing the module '$ModuleName': $_"
-}
 
-Try 
-{
     Set-Location -Path $PSScriptRoot
     $TargetPath = Join-Path -Path $ModulePath -ChildPath $ModuleName
 
@@ -40,12 +49,13 @@ Try
     }
     Get-ChildItem -Path $Files -Exclude $ExcludeFiles | ForEach-Object -Process {
         Copy-Item -Path $_ -Destination $TargetPath
-        Write-Verbose -Message ("{0} installed module file '{1}'" -f $ModuleName, $_.Name)
+        Write-Verbose -Message ("{0} installed module file '{1}'" -f $ModuleName, $_)
     }
-    Write-Verbose -Message "$ModuleName module installation successful"
+
+    Import-Module -Name TestQ -Force
+    Write-Verbose -Message "$ModuleName module installation successful to $TargetPath"
 }
 Catch 
 {
-    throw "Failed installing the module '$ModuleName': $_"
+    throw ("Failed installing the module '{0}': {1} in Line {2}" -f $ModuleName, $_, $_.InvocationInfo.ScriptLineNumber)
 }
-Import-Module -Name TestQ -Force
