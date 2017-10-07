@@ -8,8 +8,8 @@ Param (
     [String]$ModulePath,
 
     [ValidateNotNullOrEmpty()]
-    [Switch]$FromGitHub,
-
+    [String]$FromGitHub# = 'https://github.com/ili101/Test/raw/master/Install.ps1'
+    ,
     [ValidateSet('CurrentUser','AllUsers')]
     [string]
     $Scope = 'CurrentUser'
@@ -43,8 +43,9 @@ Try
 
     if ($FromGitHub)
     {
-        $ModuleName = 'TestQ'
-
+        $GitUri = ($FromGitHub -Split '/raw/')[0]
+        $Links = ((Invoke-WebRequest -Uri $GitUri).Links | Where-Object {$_.innerText -match '^.'+($Files -join '$|^.')+'$' -and $_.innerText -notmatch '^'+($ExcludeFiles -join '$|^.')+'$' -and $_.class -eq 'js-navigation-open'}).innerText
+        $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension(($Links | Where-Object {$_ -like '*.psm1'}))
     }
     else
     {
@@ -64,8 +65,6 @@ Try
     if ($FromGitHub)
     {
         $WebClient = New-Object System.Net.WebClient
-        $GitUri = 'https://github.com/ili101/Test'
-        $Links = ((Invoke-WebRequest -Uri $GitUri).Links | Where-Object {$_.innerText -match '^.'+($Files -join '$|^.')+'$' -and $_.innerText -notmatch '^'+($ExcludeFiles -join '$|^.')+'$' -and $_.class -eq 'js-navigation-open'}).innerText
         $Links | ForEach-Object {
             $WebClient.DownloadFile(($GitUri + '/raw/master/' + $_),"$TargetPath\$_")
             $File = Get-Content "$TargetPath\$_"
