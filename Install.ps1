@@ -1,3 +1,4 @@
+# Remove BOM from the file
 [CmdLetBinding()]
 Param (
     [ValidateNotNullOrEmpty()]
@@ -67,6 +68,8 @@ Try
         $Links = ((Invoke-WebRequest -Uri $GitUri).Links | Where-Object {$_.innerText -match '^.'+($Files -join '$|^.')+'$' -and $_.innerText -notmatch '^'+($ExcludeFiles -join '$|^.')+'$' -and $_.class -eq 'js-navigation-open'}).innerText
         $Links | ForEach-Object {
             $WebClient.DownloadFile(($GitUri + '/raw/master/' + $_),"$TargetPath\$_")
+            $File = Get-Content "$TargetPath\$_"
+            $File | Set-Content "$TargetPath\$_"
             Write-Verbose -Message ("{0} installed module file '{1}'" -f $ModuleName, $_)
         }
     }
