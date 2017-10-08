@@ -13,7 +13,7 @@ build: off
 
 # to run your custom scripts instead of automatic tests
 test_script:
-- ps: . .\Install.ps1 ; Get-Variable
+- ps: . .\Install.ps1 ; Invoke-Pester -EnableExit ; Get-Variable
 
 # Including commits with particular message or from specific user
 only_commits:
