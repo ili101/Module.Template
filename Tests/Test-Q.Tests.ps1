@@ -7,6 +7,6 @@
 Describe 'Test-Q' {
     It 'Returns Q' {
         $Q = Test-Q
-        $Q | Should -Be -ExpectedValue Q
+        $Q | Should -Be Q
     }
 }
