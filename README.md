@@ -4,7 +4,7 @@ PowerShell Test
 ## Install
 From repository
 ```PowerShell
-Install-Module -Name Test -Scope CurrentUser
+Install-Module -Name TestQ -Scope CurrentUser
 ```
 From GitHub
 ```PowerShell
