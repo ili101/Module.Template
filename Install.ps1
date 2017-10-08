@@ -43,16 +43,20 @@ Try
 
     if ($FromGitHub)
     {
+        $WebClient = New-Object System.Net.WebClient
         $GitUri = ($FromGitHub -Split '/raw/')[0]
         $Links = ((Invoke-WebRequest -Uri $GitUri).Links | Where-Object {$_.innerText -match '^.'+($Files -join '$|^.')+'$' -and $_.innerText -notmatch '^'+($ExcludeFiles -join '$|^.')+'$' -and $_.class -eq 'js-navigation-open'}).innerText
         $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension(($Links | Where-Object {$_ -like '*.psm1'}))
+        $ModuleVersion = (. ([Scriptblock]::Create((Invoke-WebRequest -Uri "$GitUri/raw/master/$ModuleName.psd1").Content))).ModuleVersion
     }
     else
     {
         $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension((Get-ChildItem -File -Filter *.psm1 -Name -Path $PSScriptRoot))
+        $ModuleVersion = (. ([Scriptblock]::Create((Get-Content -Path "$PSScriptRoot\$ModuleName.psd1" | Out-String)))).ModuleVersion
     }
 
     $TargetPath = Join-Path -Path $ModulePath -ChildPath $ModuleName
+    $TargetPath = Join-Path -Path $TargetPath -ChildPath $ModuleVersion
 
     # Create Directory
     if (-not (Test-Path -Path $TargetPath)) 
@@ -64,7 +68,6 @@ Try
     # Copy Files
     if ($FromGitHub)
     {
-        $WebClient = New-Object System.Net.WebClient
         $Links | ForEach-Object {
             $WebClient.DownloadFile(($GitUri + '/raw/master/' + $_),"$TargetPath\$_")
             $File = Get-Content "$TargetPath\$_"
@@ -88,3 +91,4 @@ Catch
 {
     throw ("Failed installing the module '{0}': {1} in Line {2}" -f $ModuleName, $_, $_.InvocationInfo.ScriptLineNumber)
 }
+Write-Verbose -Message 'Module installation end'

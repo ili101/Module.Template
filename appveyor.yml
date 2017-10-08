@@ -13,11 +13,15 @@ build: off
 
 # to run your custom scripts instead of automatic tests
 test_script:
-- ps: . .\Install.ps1 ; Invoke-Pester
+- ps: $VerbosePreference = 'Continue' ; . .\Install.ps1 ; Invoke-Pester
 
 # Including commits with particular message or from specific user
 only_commits:
   message: /build/                # Start a new build if message contains 'build'
+
+environment:
+  NugetApiKey:
+    secure: K+vkseiHQEbiNnvY20ZSYA+Jl0fSAbfyWc1/454xA3FgZRIRUw5vDPG2eyFFc5lj
 
 deploy_script:
 - ps: . .\Tests\Deploy.ps1
