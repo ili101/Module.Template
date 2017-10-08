@@ -8,7 +8,7 @@ Install-Module -Name TestQ -Scope CurrentUser
 ```
 From GitHub
 ```PowerShell
-$Uri = 'https://github.com/ili101/Test/raw/master/Install.ps1'; & ([Scriptblock]::Create((iwr $Uri).Content)) -FromGitHub $Uri
+$Uri = 'https://github.com/ili101/Test/raw/master/Install.ps1'; . ([Scriptblock]::Create((iwr $Uri).Content)) -FromGitHub $Uri
 ```
 
 ## Contributing
