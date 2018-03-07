@@ -27,4 +27,5 @@ Test-Q
 * Stuff
 
 ![](https://raw.githubusercontent.com/ili101/Test/master/Examples/Example1.png)
-2
+
+[![Build status](https://ci.appveyor.com/api/projects/status/fyuu9hnl68ttn35n?svg=true)](https://ci.appveyor.com/project/ili101/test)
