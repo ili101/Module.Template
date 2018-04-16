@@ -14,5 +14,9 @@ Describe 'Test-Q' {
         $Q = Test-Q
         $Q | Should -Not -Be Y
     }
+    It 'Bad Test' {
+        $Q = Test-Q
+        $Q | Should -Be Y
+    }
 }
 Write-Verbose -Message 'Testing end'
