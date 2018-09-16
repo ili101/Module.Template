@@ -18,12 +18,13 @@ test_script:
 # Finalize pass - collect and upload results
 - ps: . .\Tests\AppVeyor.ps1 -Finalize
 
+# Skipping commits with particular message or from specific user
+skip_commits:
+  message: /\[Skip\]/
+
 # Including commits with particular message or from specific user
 #only_commits:
 #  message: /\[build\]/                # Start a new build if message contains 'build'
-
-skip_commits:
-message: /\[Skip\]/
 
 environment:
   NugetApiKey:
