@@ -2,7 +2,7 @@
 #. $PSScriptRoot\Get-Planet.ps1
 #. $PSScriptRoot\..\Install.ps1
 
-# To run the tests run the script file, 
+# To run the tests run the script file,
 # for example by pressing F5.
 Write-Verbose -Message 'Testing start'
 Describe 'Test-Q' {
@@ -17,6 +17,6 @@ Describe 'Test-Q' {
     It 'Bad Test' {
         $Q = Test-Q
         $Q | Should -Be Y
-    }
+    } -Skip
 }
 Write-Verbose -Message 'Testing end'

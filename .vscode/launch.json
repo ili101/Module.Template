@@ -8,7 +8,7 @@
             "type": "PowerShell",
             "request": "launch",
             "name": "PowerShell Pester Tests",
-            "script": "Import-Module -Name '.\\' -Force ; Invoke-Pester",
+            "script": "Import-Module -Name '.\\TestQ.psd1' -Force ; Invoke-Pester",
             "args": [""],
             "cwd": "${workspaceFolder}"
         },

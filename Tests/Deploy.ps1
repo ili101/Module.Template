@@ -31,14 +31,14 @@ try
         }
 
         $VersionLocal = ((Get-Module -Name $ModuleName -ListAvailable).Version | Measure-Object -Maximum).Maximum
-        Write-Verbose -Message "$ModuleName VersionGallery $VersionGallery, VersionLocal $VersionLocal"
+        "[Output] $ModuleName, VersionGallery: $VersionGallery, VersionLocal: $VersionLocal"
         if ($VersionGallery -lt $VersionLocal -or $Force)
         {
             if (!$NugetApiKey)
             {
                 $NugetApiKey = $Env:NugetApiKey
             }
-            Write-Verbose -Message "Deploying $ModuleName version $VersionLocal"
+            "[Output] Deploying $ModuleName version $VersionLocal"
             Publish-Module -Name $ModuleName -NuGetApiKey $NugetApiKey -RequiredVersion $VersionLocal
         }
     }
