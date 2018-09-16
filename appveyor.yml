@@ -13,11 +13,17 @@ build: off
 
 # to run your custom scripts instead of automatic tests
 test_script:
-- ps: $VerbosePreference = 'Continue' ; . .\Install.ps1 ; Invoke-Pester -EnableExit
+- ps: . .\Tests\AppVeyor.ps1
+
+# Finalize pass - collect and upload results
+- ps: . .\Tests\AppVeyor.ps1 -Finalize
 
 # Including commits with particular message or from specific user
-only_commits:
-  message: /\[build\]/                # Start a new build if message contains 'build'
+#only_commits:
+#  message: /\[build\]/                # Start a new build if message contains 'build'
+
+skip_commits:
+message: /\[Skip\]/
 
 environment:
   NugetApiKey:

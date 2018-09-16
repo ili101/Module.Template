@@ -1,7 +1,6 @@
-﻿#Get-ChildItem Env:
-#Get-Variable
-[CmdLetBinding()]
-Param (
+﻿[CmdLetBinding()]
+Param
+(
     [ValidateNotNullOrEmpty()]
     [String]$ModuleName,
 
@@ -10,12 +9,14 @@ Param (
 
     [Switch]$Force
 )
-Write-Verbose -Message 'Deploy start'
+
+$ErrorActionPreferenceOrg = $ErrorActionPreference
 $ErrorActionPreference = 'Stop'
 try
 {
     if (!$Env:APPVEYOR -or $Env:APPVEYOR_REPO_BRANCH -eq "master")
     {
+        '[Progress] Deploy Start'
         $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension((Get-ChildItem -File -Filter *.psm1 -Name -Path "$PSScriptRoot\.."))
         try
         {
@@ -41,6 +42,10 @@ try
             Publish-Module -Name $ModuleName -NuGetApiKey $NugetApiKey -RequiredVersion $VersionLocal
         }
     }
+    else
+    {
+        '[Progress] Deploy Skipped'
+    }
 }
 catch
 {
@@ -48,4 +53,8 @@ catch
     $line = $_.InvocationInfo.ScriptLineNumber
     "Error was in Line $line"
 }
-Write-Verbose -Message 'Deploy end'
+finally
+{
+    $ErrorActionPreference = $ErrorActionPreferenceOrg
+}
+'[Progress] Deploy Ended'

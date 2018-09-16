@@ -1,6 +1,10 @@
 # Test
 PowerShell Test
 
+| Master | PowerShell Gallery | Beta | Alpha |
+|--------|--------------------|------|-------|
+|[![Build status](https://ci.appveyor.com/api/projects/status/fyuu9hnl68ttn35n/branch/master?svg=true)](https://ci.appveyor.com/project/ili101/Test)|[![PowerShell Gallery](https://img.shields.io/powershellgallery/v/TestQ.svg)](https://www.powershellgallery.com/packages/TestQ/) [![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/TestQ.svg)](https://www.powershellgallery.com/packages/TestQ/)|[![Build status](https://ci.appveyor.com/api/projects/status/fyuu9hnl68ttn35n/branch/Beta?svg=true)](https://ci.appveyor.com/project/ili101/Test)|[![Build status](https://ci.appveyor.com/api/projects/status/fyuu9hnl68ttn35n/branch/Alpha?svg=true)](https://ci.appveyor.com/project/ili101/Test)|
+
 ## Install
 From repository
 ```PowerShell
@@ -8,7 +12,7 @@ Install-Module -Name TestQ -Scope CurrentUser
 ```
 From GitHub
 ```PowerShell
-$Uri = 'https://github.com/ili101/Test/raw/master/Install.ps1'; . ([Scriptblock]::Create((iwr $Uri).Content)) -FromGitHub $Uri
+'https://raw.githubusercontent.com/ili101/Test/master/Install.ps1'; & ([Scriptblock]::Create((irm $Uri))) -FromGitHub $Uri
 ```
 
 ## Contributing
@@ -27,5 +31,3 @@ Test-Q
 * Stuff
 
 ![](https://raw.githubusercontent.com/ili101/Test/master/Examples/Example1.png)
-
-[![Build status](https://ci.appveyor.com/api/projects/status/fyuu9hnl68ttn35n?svg=true)](https://ci.appveyor.com/project/ili101/test)
