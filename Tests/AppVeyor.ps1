@@ -13,7 +13,7 @@ if(!$Finalize)
 {
     "[Progress] Testing with PowerShell $PSVersion"
     . .\Install.ps1
-    Invoke-Pester -EnableExit -OutputFile $TestFile
+    Invoke-Pester -OutputFile $TestFile
 }
 else # Finalize
 {
