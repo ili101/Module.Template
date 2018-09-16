@@ -26,7 +26,7 @@ else # Finalize
         "[Output] Uploading Files: $Address, $Source"
         [System.Net.WebClient]::new().UploadFile($Address, $Source)
 
-        if (([Xml](Get-Content -Path 'C:\Users\illym\Desktop\Temp\file2.xml')).'test-results'.failures -ne '0')
+        if (([Xml](Get-Content -Path $Source)).'test-results'.failures -ne '0')
         {
             $Failure = $true
         }
