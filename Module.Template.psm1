@@ -1,4 +1,4 @@
-#<# Need "Using module TestQ" to work
+#<# Need "Using module Module.Template" to work
 class Base64z
 {
     [string]$ItemName
