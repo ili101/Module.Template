@@ -2,11 +2,12 @@
 version: 0.0.{build}
 
 # Build worker image (VM template)
-image: WMF 5
+image: Visual Studio 2017
 
 # scripts that run after cloning repository
 install:
 - ps: choco install pester
+- ps: Install-Module Assert -Force
 
 # to disable automatic builds
 build: off
@@ -31,4 +32,4 @@ environment:
     secure: K+vkseiHQEbiNnvY20ZSYA+Jl0fSAbfyWc1/454xA3FgZRIRUw5vDPG2eyFFc5lj
 
 deploy_script:
-- ps: $null = Install-PackageProvider -Name NuGet -Force ; . .\Tests\Deploy.ps1
+- ps: $null = Install-PackageProvider -Name NuGet -Force ; . .\Tests\Deploy.ps1 -PowerShellGallery -AppVeyorZip
