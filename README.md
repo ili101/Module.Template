@@ -22,7 +22,7 @@ If you fund a bug or added functionality or anything else just fork and send pul
 Returns Q
 
 #### Examples:
-[Join-Object Test.ps1](https://github.com/ili101/Module.Template/blob/master/Examples/Test-Q.Examples.ps1)
+[Test-Q.Examples.ps1](https://github.com/ili101/Module.Template/blob/master/Examples/Test-Q.Examples.ps1)
 ```PowerShell
 Test-Q
 ```
@@ -30,4 +30,4 @@ Test-Q
 #### To do:
 * Stuff
 
-![](https://raw.githubusercontent.com/ili101/Test/master/Examples/Example1.png)
+![](https://raw.githubusercontent.com/ili101/Module.Template/master/Examples/Example1.png)
