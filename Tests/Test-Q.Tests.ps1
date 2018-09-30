@@ -1,3 +1,5 @@
+#Requires -Modules Pester
+
 Describe 'Test-Q' {
     It 'Returns Q' {
         $Q = Test-Q
