@@ -1,6 +1,7 @@
 #Requires -Modules Pester
 
-Describe 'Test-Q' {
+$PSVersion = $PSVersionTable.PSVersion.Major
+Describe "Test-Q $PSVersion" {
     It 'Returns Q' {
         $Q = Test-Q
         $Q | Should -Be Q
