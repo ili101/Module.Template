@@ -11,7 +11,7 @@ init:
 # scripts that run after cloning repository
 install:
 - ps: . .\Tests\AppVeyor.ps1 -Initialize
-- ps: choco install pester
+#- ps: choco install pester
 - ps: Install-Module Assert -Force
 
 # to disable automatic builds
