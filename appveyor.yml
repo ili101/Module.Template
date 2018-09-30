@@ -1,5 +1,5 @@
 # version format
-version: 0.0.{build}
+#version: 0.0.{build}
 
 # Build worker image (VM template)
 image: Visual Studio 2017
