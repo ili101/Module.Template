@@ -75,13 +75,17 @@ else # Finalize
     '[Progress] Finalizing'
     $Failure = $false
     # Upload results for test page
+    $Address = 'https://ci.appveyor.com/api/testresults/nunit/{0}' -f $env:APPVEYOR_JOB_ID
     Get-ChildItem -Path '.\TestResultsPS*.xml' | Foreach-Object {
-        $Address = 'https://ci.appveyor.com/api/testresults/nunit/{0}' -f $env:APPVEYOR_JOB_ID
         $Source = $_.FullName
         "[Output] Uploading Files: $Address, $Source"
-        [System.Net.WebClient]::new().UploadFile($Address, $Source)
+        $PSVersion = $_.Name.Replace('TestResults', '').Replace('.xml', '')
+        [xml]$Xml = Get-Content -Path $Source
+        Select-Xml -Xml $Xml -XPath '//test-case' | ForEach-Object {$_.Node.name = "$PSVersion " + $_.Node.name }
+        Invoke-RestMethod -Method Post -Uri $Address -Body $Xml.InnerText
+        #[System.Net.WebClient]::new().UploadFile($Address, $Source)
 
-        if (([Xml](Get-Content -Path $Source)).'test-results'.failures -ne '0')
+        if ($Xml.'test-results'.failures -ne '0')
         {
             $Failure = $true
         }
