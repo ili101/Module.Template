@@ -12,7 +12,7 @@
     RootModule        = 'Module.Template.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.7'
+    ModuleVersion     = '1.0.8'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -123,4 +123,3 @@ https://github.com/ili101/Module.Template/blob/master/CHANGELOG.md
     # DefaultCommandPrefix = ''
 
 }
-

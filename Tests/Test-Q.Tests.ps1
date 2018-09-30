@@ -1,4 +1,4 @@
-﻿Describe 'Test-Q' {
+Describe 'Test-Q' {
     It 'Returns Q' {
         $Q = Test-Q
         $Q | Should -Be Q

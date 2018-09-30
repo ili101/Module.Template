@@ -1,4 +1,4 @@
-﻿Add-Type -Language CSharp -TypeDefinition @"
+Add-Type -Language CSharp -TypeDefinition @"
 public class Base64
 {
     public string ItemName;

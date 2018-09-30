@@ -1,4 +1,4 @@
-﻿class Base64q
+class Base64q
 {
     [string]$ItemName
 

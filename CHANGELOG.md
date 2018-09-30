@@ -1,4 +1,4 @@
-﻿## 1.0.4 - 2018/09/29
+## 1.0.4 - 2018/09/29
 ### Changes
 * Module rename.
 * AppVeyor image: Visual Studio 2017.
