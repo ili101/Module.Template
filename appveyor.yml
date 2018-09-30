@@ -11,7 +11,7 @@ init:
 # scripts that run after cloning repository
 install:
 - ps: . .\Tests\AppVeyor.ps1 -Initialize
-- ps: Install-Module -Name Pester -Force
+- ps: Install-Module -Name Pester -Force -SkipPublisherChec
 - ps: Get-Module pester -ListAvailable | select ModuleType,Version,Name,Path | Out-String
 #- ps: choco install pester
 - ps: Install-Module Assert -Force
