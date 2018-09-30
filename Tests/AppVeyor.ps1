@@ -82,8 +82,9 @@ else # Finalize
         $PSVersion = $_.Name.Replace('TestResults', '').Replace('.xml', '')
         [xml]$Xml = Get-Content -Path $Source
         Select-Xml -Xml $Xml -XPath '//test-case' | ForEach-Object {$_.Node.name = "$PSVersion " + $_.Node.name }
-        Invoke-RestMethod -Method Post -Uri $Address -Body $Xml
-        #[System.Net.WebClient]::new().UploadFile($Address, $Source)
+        $Xml.OuterXml | Out-File -FilePath $Source
+        #Invoke-RestMethod -Method Post -Uri $Address -Body $Xml
+        [System.Net.WebClient]::new().UploadFile($Address, $Source)
 
         if ($Xml.'test-results'.failures -ne '0')
         {
