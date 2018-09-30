@@ -14,6 +14,8 @@ install:
 #- ps: choco install pester
 - ps: Install-Module -Name Pester -Force -SkipPublisherCheck
 - ps: Install-Module -Name Assert -Force
+- pwsh: Install-Module -Name Pester -Force
+- pwsh: Install-Module -Name Assert -Force
 
 # to disable automatic builds
 build: off
