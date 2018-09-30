@@ -56,6 +56,11 @@ $TestFile = "TestResultsPS{0}.xml" -f $PSVersionTable.PSVersion
 # Run a test with the current version of PowerShell
 if (!$Finalize)
 {
+    # update AppVeyor build
+    $psd1 = (Get-ChildItem -File -Filter *.psd1 -Name -Path "$PSScriptRoot1\..").PSPath
+    $ModuleVersion = (. ([Scriptblock]::Create((Get-Content -Path $psd1 | Out-String)))).ModuleVersion
+    Update-AppveyorBuild -Version "$ModuleVersion ($env:APPVEYOR_BUILD_NUMBER) $Env:APPVEYOR_REPO_BRANCH"
+
     "[Progress] Testing On:"
     Get-EnvironmentInfo
     . .\Install.ps1
