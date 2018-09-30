@@ -4,6 +4,10 @@ version: 0.0.{build}
 # Build worker image (VM template)
 image: Visual Studio 2017
 
+# Fix CRLF
+init:
+- git config --global --unset core.autocrlf
+
 # scripts that run after cloning repository
 install:
 - ps: choco install pester
