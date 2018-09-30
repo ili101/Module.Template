@@ -21,6 +21,7 @@ build: off
 # to run your custom scripts instead of automatic tests
 test_script:
 - ps: . .\Tests\AppVeyor.ps1
+- pwsh: . .\Tests\AppVeyor.ps1
 
 # Finalize pass - collect and upload results
 - ps: . .\Tests\AppVeyor.ps1 -Finalize

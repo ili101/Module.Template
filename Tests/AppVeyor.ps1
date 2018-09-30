@@ -61,6 +61,10 @@ elseif (!$Finalize) # Run a test with the current version of PowerShell
 
     "[Progress] Testing On:"
     Get-EnvironmentInfo
+    'PSModulePath'
+    ($Env:PSModulePath -split ';')
+    'Get-Module'
+    Get-Module pester -ListAvailable | select ModuleType, Version, Name, Path | Out-String
     . .\Install.ps1
     $TestFile = "TestResultsPS{0}.xml" -f $PSVersionTable.PSVersion
     Invoke-Pester -OutputFile $TestFile
