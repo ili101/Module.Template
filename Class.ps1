@@ -2,7 +2,7 @@
 {
     [string]$ItemName
 
-    Base64q([string]$String) 
+    Base64q([string]$String)
     {
         $this.ItemName = $String
     }
