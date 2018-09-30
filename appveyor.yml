@@ -1,5 +1,5 @@
 # version format
-#version: 0.0.{build}
+version: ({build})
 
 # Build worker image (VM template)
 image: Visual Studio 2017
@@ -10,6 +10,7 @@ init:
 
 # scripts that run after cloning repository
 install:
+- ps: . .\Tests\AppVeyor.ps1 -Initialize
 - ps: choco install pester
 - ps: Install-Module Assert -Force
 
