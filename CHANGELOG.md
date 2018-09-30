@@ -1,3 +1,14 @@
+## 1.1.0 - 2018/09/30
+### Added
+* PowerShell Core support.
+* Update-AppveyorBuild -Version.
+### Changes
+* Pester from PowerShellGallery.
+### Fixed
+* Compress-Archive replaced with IO.Compression.ZipFile as Compress-Archive don't work on opened files.
+* Fix text files encoding.
+* AppVeyor Git CRLF encoding fix.
+
 ## 1.0.4 - 2018/09/29
 ### Changes
 * Module rename.
