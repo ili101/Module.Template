@@ -61,12 +61,7 @@ elseif (!$Finalize) # Run a test with the current version of PowerShell
 
     "[Progress] Testing On:"
     Get-EnvironmentInfo
-    'PSModulePath'
-    ($Env:PSModulePath -split ';')
-    'Get-Module'
-    Get-Module pester -ListAvailable | select ModuleType, Version, Name, Path | Out-String
     . .\Install.ps1
-    Get-Module Module.Template -ListAvailable | select ModuleType, Version, Name, Path | Out-String
     $TestFile = "TestResultsPS{0}.xml" -f $PSVersionTable.PSVersion
     Invoke-Pester -OutputFile $TestFile
 }
@@ -79,10 +74,12 @@ else # Finalize
     Get-ChildItem -Path '.\TestResultsPS*.xml' | Foreach-Object {
         $Source = $_.FullName
         "[Output] Uploading Files: $Address, $Source"
+        # Add PowerShell version to test results
         $PSVersion = $_.Name.Replace('TestResults', '').Replace('.xml', '')
         [xml]$Xml = Get-Content -Path $Source
-        Select-Xml -Xml $Xml -XPath '//test-case' | ForEach-Object {$_.Node.name = "$PSVersion " + $_.Node.name }
+        Select-Xml -Xml $Xml -XPath '//test-case' | ForEach-Object {$_.Node.name = "$PSVersion " + $_.Node.name}
         $Xml.OuterXml | Out-File -FilePath $Source
+
         #Invoke-RestMethod -Method Post -Uri $Address -Body $Xml
         [System.Net.WebClient]::new().UploadFile($Address, $Source)
 
