@@ -11,10 +11,9 @@ init:
 # scripts that run after cloning repository
 install:
 - ps: . .\Tests\AppVeyor.ps1 -Initialize
-- ps: Install-Module -Name Pester -Force -SkipPublisherCheck
-- ps: Get-Module pester -ListAvailable | select ModuleType,Version,Name,Path | Out-String
 #- ps: choco install pester
-- ps: Install-Module Assert -Force
+- ps: Install-Module -Name Pester -Force -SkipPublisherCheck
+- ps: Install-Module -Name Assert -Force
 
 # to disable automatic builds
 build: off
