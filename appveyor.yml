@@ -12,9 +12,9 @@ init:
 install:
 - ps: . .\Tests\AppVeyor.ps1 -Initialize
 #- ps: choco install pester
-- ps: Install-Module -Name Pester -Force -SkipPublisherCheck
-- ps: Install-Module -Name Assert -Force
-- pwsh: |-
+#- ps: Install-Module -Name Pester -Force -SkipPublisherCheck
+#- ps: Install-Module -Name Assert -Force
+- ps: |-
     $PowerShellVersion = "7.0.0-preview.1"
     Write-Host "Installing PowerShell Core..."
     Write-Host "Downloading..."
@@ -28,8 +28,9 @@ install:
       $PowerShellFolder += '-preview'
     }
     $env:Path = "$env:ProgramFiles\PowerShell\$PowerShellFolder;$env:Path"
-- pwsh: Install-Module -Name Pester -Force
-- pwsh: Install-Module -Name Assert -Force
+    Write-Host $env:Path
+#- pwsh: Install-Module -Name Pester -Force
+#- pwsh: Install-Module -Name Assert -Force
 
 # to disable automatic builds
 build: off
