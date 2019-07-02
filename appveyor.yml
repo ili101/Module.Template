@@ -2,7 +2,7 @@
 version: ({build})
 
 # Build worker image (VM template)
-image: Visual Studio 2017
+image: Visual Studio 2019
 
 # Fix CRLF
 init:
@@ -14,6 +14,20 @@ install:
 #- ps: choco install pester
 - ps: Install-Module -Name Pester -Force -SkipPublisherCheck
 - ps: Install-Module -Name Assert -Force
+- pwsh: |-
+    $PowerShellVersion = "7.0.0-preview.1"
+    Write-Host "Installing PowerShell Core..."
+    Write-Host "Downloading..."
+    $MsiPath = Join-Path $env:TEMP "PowerShell-$PowerShellVersion-win-x64.msi"
+    [System.Net.WebClient]::new().DownloadFile("https://github.com/PowerShell/PowerShell/releases/download/v$PowerShellVersion/PowerShell-$PowerShellVersion-win-x64.msi", $MsiPath)
+    Write-Host "Installing..."
+    Start-Process 'msiexec.exe' -Wait -ArgumentList "/i $MsiPath /quiet"
+    Remove-Item -Path $MsiPath
+    $PowerShellFolder = $PowerShellVersion[0]
+    if ($PowerShellVersion -like "*preview*") {
+      $PowerShellFolder += '-preview'
+    }
+    $env:Path = "$env:ProgramFiles\PowerShell\$PowerShellFolder;$env:Path"
 - pwsh: Install-Module -Name Pester -Force
 - pwsh: Install-Module -Name Assert -Force
 

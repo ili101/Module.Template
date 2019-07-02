@@ -56,6 +56,7 @@ elseif (!$Finalize) # Run a test with the current version of PowerShell
             @{name = "PSComputerName"; expression = {$Env:Computername}},
             @{name = "WindowsVersion"; expression = { $WindowsVersion }},
             @{name = "PSVersion"; expression = {$PSVersionTable.PSVersion}}
+            @{name = "EnvironmentPath"; expression = {$env:Path}}
         )
     }
 
