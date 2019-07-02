@@ -1,4 +1,4 @@
-# version format
+# Version format
 version: ({build})
 
 # Build worker image (VM template)
@@ -8,12 +8,12 @@ image: Visual Studio 2019
 init:
 - git config --global --unset core.autocrlf
 
-# scripts that run after cloning repository
+# Scripts that run after cloning repository
 install:
 - ps: . .\Tests\AppVeyor.ps1 -Initialize
-#- ps: choco install pester
 - ps: Install-Module -Name Pester -Force -SkipPublisherCheck
 - ps: Install-Module -Name Assert -Force
+# Install other PowerShell Core version (Optional)
 - ps: |-
     $PowerShellVersion = "7.0.0-preview.1"
     Write-Host "Installing PowerShell Core..."
@@ -31,10 +31,10 @@ install:
 - pwsh: Install-Module -Name Pester -Force
 - pwsh: Install-Module -Name Assert -Force
 
-# to disable automatic builds
+# To disable automatic builds
 build: off
 
-# to run your custom scripts instead of automatic tests
+# To run your custom scripts instead of automatic tests
 test_script:
 - ps: . .\Tests\AppVeyor.ps1
 - pwsh: . .\Tests\AppVeyor.ps1
