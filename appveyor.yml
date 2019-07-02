@@ -27,7 +27,7 @@ install:
     if ($PowerShellVersion -like "*preview*") {
       $PowerShellFolder += '-preview'
     }
-    $env:Path = "$env:ProgramFiles\PowerShell\$PowerShellFolder;$env:Path"
+    #$env:Path = "$env:ProgramFiles\PowerShell\$PowerShellFolder;$env:Path"
     Write-Host $env:Path
 #- pwsh: Install-Module -Name Pester -Force
 #- pwsh: Install-Module -Name Assert -Force
