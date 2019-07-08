@@ -13,21 +13,8 @@ install:
 - ps: . .\Tests\AppVeyor.ps1 -Initialize
 - ps: Install-Module -Name Pester -Force -SkipPublisherCheck
 - ps: Install-Module -Name Assert -Force
-# Install other PowerShell Core version (Optional)
-- ps: |-
-    $PowerShellVersion = "7.0.0-preview.1"
-    Write-Host "Installing PowerShell Core..."
-    Write-Host "Downloading..."
-    $MsiPath = Join-Path $env:TEMP "PowerShell-$PowerShellVersion-win-x64.msi"
-    [System.Net.WebClient]::new().DownloadFile("https://github.com/PowerShell/PowerShell/releases/download/v$PowerShellVersion/PowerShell-$PowerShellVersion-win-x64.msi", $MsiPath)
-    Write-Host "Installing..."
-    Start-Process 'msiexec.exe' -Wait -ArgumentList "/i $MsiPath /quiet"
-    Remove-Item -Path $MsiPath
-    $PowerShellFolder = $PowerShellVersion[0]
-    if ($PowerShellVersion -like "*preview*") {
-      $PowerShellFolder += '-preview'
-    }
-    $env:Path = "$env:ProgramFiles\PowerShell\$PowerShellFolder;$env:Path"
+## Install other PowerShell Core version (Optional)
+- ps: "& .\Tests\InstallPowerShell.ps1 -Version '7.0.0-preview.1'"
 - pwsh: Install-Module -Name Pester -Force
 - pwsh: Install-Module -Name Assert -Force
 
