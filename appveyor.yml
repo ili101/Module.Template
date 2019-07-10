@@ -1,51 +1,65 @@
 # Version format
-version: ({build})
+version: '({build})'
 
-# Build worker image (VM template)
+# Build worker image (VM templates)
 image:
   - Ubuntu1804
-  - Visual Studio 2019
+  - 'Visual Studio 2019'
 
-# Fix CRLF
+# Fix CRLF on Windows
 init:
-  - cmd: git config --global --unset core.autocrlf
-
-# Scripts that run after cloning repository
-install:
-  - ps: . .\Tests\AppVeyor.ps1 -Initialize
-  - ps: Install-Module -Name Pester -Force -SkipPublisherCheck
-  - ps: Install-Module -Name Assert -Force
-  - ps: '& .\Tests\InstallPowerShell.ps1 -Version "7.0.0-preview.1"' # Install other PowerShell Core version (Optional)
-  - pwsh: Install-Module -Name Pester -Force
-  - pwsh: Install-Module -Name Assert -Force
+  - cmd: 'git config --global --unset core.autocrlf'
 
 # To disable automatic builds
 build: off
 
-# To run your custom scripts instead of automatic tests
-test_script:
-  - ps: . .\Tests\AppVeyor.ps1
-  - pwsh: . .\Tests\AppVeyor.ps1
-  - ps: . .\Tests\AppVeyor.ps1 -Finalize # Finalize - Collect and upload results
-for:
-  - matrix:
-      only:
-        - image: Ubuntu1804
-    test_script:
-      - ps: . .\Tests\AppVeyor.ps1
-      - ps: . .\Tests\AppVeyor.ps1 -Finalize # Finalize - Collect and upload results
-
 # Skipping commits with particular message or from specific user
 skip_commits:
-  message: /\[Skip\]/
+  message: '/\[Skip\]/'
 
 # Including commits with particular message or from specific user
 #only_commits:
-#  message: /\[build\]/                # Start a new build if message contains 'build'
+#  message: '/\[build\]/' # Start a new build if message contains 'build'
 
+# Powershell Gallery deploy Key
 environment:
   NugetApiKey:
     secure: K+vkseiHQEbiNnvY20ZSYA+Jl0fSAbfyWc1/454xA3FgZRIRUw5vDPG2eyFFc5lj
 
+# Scripts that run after cloning repository
+install:
+  - ps: 'Install-Module -Name Pester -Force -SkipPublisherCheck'
+  - ps: 'Install-Module -Name Assert -Force'
+  # PowerShell Core
+  - ps: '& .\Tests\InstallPowerShell.ps1 -Version "7.0.0-preview.1"' # Install other PowerShell Core version (Optional)
+  - pwsh: 'Install-Module -Name Pester -Force'
+  - pwsh: 'Install-Module -Name Assert -Force'
+
+# To run your custom scripts instead of automatic tests
+test_script:
+  - ps: '& .\Tests\AppVeyor.ps1'
+  - pwsh: '& .\Tests\AppVeyor.ps1'
+  - ps: '& .\Tests\AppVeyor.ps1 -Finalize' # Collect and upload results
+
+# Deploy
 deploy_script:
-  - ps: $null = Install-PackageProvider -Name NuGet -Force ; . .\Tests\Deploy.ps1 -PowerShellGallery -AppVeyorZip -RunOnlyOn 'Windows'
+  - ps: '$null = Install-PackageProvider -Name NuGet -Force ; . .\Tests\Deploy.ps1 -PowerShellGallery -AppVeyorZip'
+
+# Linux setup
+for:
+  -
+    matrix:
+      only:
+        - image: Ubuntu1804
+    # Scripts that run after cloning repository
+    install:
+      - pwsh: '& .\Tests\AppVeyor.ps1 -Initialize' # Set AppVeyor build version
+      - sh: 'sudo apt-get install -y powershell-preview && sudo rm /usr/bin/pwsh && sudo ln -s /opt/microsoft/powershell/7-preview/pwsh /usr/bin/pwsh' # Install other PowerShell Core version (Optional)
+      - pwsh: 'Install-Module -Name Pester -Force'
+      - pwsh: 'Install-Module -Name Assert -Force'
+    # To run your custom scripts instead of automatic tests
+    test_script:
+      - pwsh: '& .\Tests\AppVeyor.ps1'
+      - pwsh: '& .\Tests\AppVeyor.ps1 -Finalize' # Collect and upload results
+    # Skip Deploy
+    deploy_script:
