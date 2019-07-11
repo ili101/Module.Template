@@ -143,11 +143,11 @@ Try {
         Get-ChildItem -Path $PSScriptRoot -Exclude $ExcludeFiles | Where-Object { LikeAny $_.Name $IncludeFiles } | ForEach-Object {
             if ($_.Attributes -ne 'Directory') {
                 Copy-Item -Path $_ -Destination $TargetPath
-                Write-Verbose -Message ('Installed module file "{1}"' -f $_)
+                Write-Verbose -Message ('Installed module file "{0}"' -f $_)
             }
             else {
                 Copy-Item -Path $_ -Destination $TargetPath -Recurse -Force
-                Write-Verbose -Message ('Installed module folder "{1}"' -f $_)
+                Write-Verbose -Message ('Installed module folder "{0}"' -f $_)
             }
         }
     }
