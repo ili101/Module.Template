@@ -4,7 +4,7 @@ param
     [Switch]$Test,
     [Switch]$Finalize
 )
-
+$ErrorActionPreference = 'Stop'
 if ($Initialize) {
     # Update AppVeyor build
     $Psd1 = (Get-ChildItem -File -Filter *.psd1 -Name -Path (Split-Path $PSScriptRoot)).PSPath
