@@ -174,8 +174,9 @@ Try
     }
 
     # Import Module
-    Import-Module -Name $ModuleName -Force
     Write-Verbose -Message "$ModuleName module installation successful to $TargetPath"
+    Import-Module -Name $ModuleName -Force
+    Write-Verbose -Message "Module installed"
 }
 Catch
 {
