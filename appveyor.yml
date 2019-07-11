@@ -37,8 +37,8 @@ install:
 
 # To run your custom scripts instead of automatic tests
 test_script:
-  - ps: '& .\Tests\AppVeyor.ps1'
-  - pwsh: '& .\Tests\AppVeyor.ps1'
+  - ps: '& .\Tests\AppVeyor.ps1 -Test'
+  - pwsh: '& .\Tests\AppVeyor.ps1 -Test'
   - ps: '& .\Tests\AppVeyor.ps1 -Finalize' # Collect and upload results
 
 # Deploy
@@ -59,7 +59,7 @@ for:
       - pwsh: 'Install-Module -Name Assert -Force'
     # To run your custom scripts instead of automatic tests
     test_script:
-      - pwsh: '& .\Tests\AppVeyor.ps1'
+      - pwsh: '& .\Tests\AppVeyor.ps1 -Test'
       - pwsh: '& .\Tests\AppVeyor.ps1 -Finalize' # Collect and upload results
     # Skip Deploy
     deploy_script:

@@ -1,96 +1,107 @@
 param
 (
-    [Switch]$Finalize,
-    [Switch]$Initialize
+    [Switch]$Initialize,
+    [Switch]$Test,
+    [Switch]$Finalize
 )
 
-if ($Initialize)
-{
+if ($Initialize) {
     # Update AppVeyor build
-    $psd1 = (Get-ChildItem -File -Filter *.psd1 -Name -Path "$PSScriptRoot\..").PSPath
-    $ModuleVersion = (. ([Scriptblock]::Create((Get-Content -Path $psd1 | Out-String)))).ModuleVersion
+    $Psd1 = (Get-ChildItem -File -Filter *.psd1 -Name -Path (Split-Path $PSScriptRoot)).PSPath
+    $ModuleVersion = (. ([Scriptblock]::Create((Get-Content -Path $Psd1 | Out-String)))).ModuleVersion
     Update-AppveyorBuild -Version "$ModuleVersion ($env:APPVEYOR_BUILD_NUMBER) $Env:APPVEYOR_REPO_BRANCH"
 }
-elseif (!$Finalize) # Run a test with the current version of PowerShell
-{
-    function Get-EnvironmentInfo
-    {
-        $Lookup = @{
-            378389 = [version]'4.5'
-            378675 = [version]'4.5.1'
-            378758 = [version]'4.5.1'
-            379893 = [version]'4.5.2'
-            393295 = [version]'4.6'
-            393297 = [version]'4.6'
-            394254 = [version]'4.6.1'
-            394271 = [version]'4.6.1'
-            394802 = [version]'4.6.2'
-            394806 = [version]'4.6.2'
-            460798 = [version]'4.7'
-            460805 = [version]'4.7'
-            461308 = [version]'4.7.1'
-            461310 = [version]'4.7.1'
-            461808 = [version]'4.7.2'
-            461814 = [version]'4.7.2'
-        }
+if ($Test) {
+    # Run a test with the current version of PowerShell
+    function Get-EnvironmentInfo {
+        if ($null -eq $IsWindows -or $IsWindows) {
+            # Get Windows Version
+            try {
+                $WinRelease, $WinVer = Get-ItemPropertyValue "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" ReleaseId, CurrentMajorVersionNumber, CurrentMinorVersionNumber, CurrentBuildNumber, UBR
+                $WindowsVersion = "$($WinVer -join '.') ($WinRelease)"
+            }
+            catch {
+                $WindowsVersion = [System.Environment]::OSVersion.Version
+            }
 
-        # For extra effect we could get the Windows 10 OS version and build release id:
-        try
-        {
-            $WinRelease, $WinVer = Get-ItemPropertyValue "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" ReleaseId, CurrentMajorVersionNumber, CurrentMinorVersionNumber, CurrentBuildNumber, UBR
-            $WindowsVersion = "$($WinVer -join '.') ($WinRelease)"
-        }
-        catch
-        {
-            $WindowsVersion = [System.Environment]::OSVersion.Version
-        }
+            # Get .Net Version
+            # https://stackoverflow.com/questions/3487265/powershell-script-to-return-versions-of-net-framework-on-a-machine
+            $Lookup = @{
+                378389 = [version]'4.5'
+                378675 = [version]'4.5.1'
+                378758 = [version]'4.5.1'
+                379893 = [version]'4.5.2'
+                393295 = [version]'4.6'
+                393297 = [version]'4.6'
+                394254 = [version]'4.6.1'
+                394271 = [version]'4.6.1'
+                394802 = [version]'4.6.2'
+                394806 = [version]'4.6.2'
+                460798 = [version]'4.7'
+                460805 = [version]'4.7'
+                461308 = [version]'4.7.1'
+                461310 = [version]'4.7.1'
+                461808 = [version]'4.7.2'
+                461814 = [version]'4.7.2'
+                528040 = [version]'4.8'
+                528049 = [version]'4.8'
+            }
 
-        Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -Recurse |
-            Get-ItemProperty -Name Version, Release -ErrorAction SilentlyContinue |
-            Where-Object { $_.PSChildName -eq "Full"} |
-            Select-Object @(
-            @{name = ".NET Framework"; expression = {$_.PSChildName}},
-            @{name = "Product"; expression = {$Lookup[$_.Release]}},
-            'Version',
-            'Release',
-            @{name = "PSComputerName"; expression = {$Env:Computername}},
-            @{name = "WindowsVersion"; expression = { $WindowsVersion }},
-            @{name = "PSVersion"; expression = {$PSVersionTable.PSVersion}}
-            #@{name = "EnvironmentPath"; expression = {$env:Path}}
-        )
+            # For One True framework (latest .NET 4x), change the Where-Object match
+            # to PSChildName -eq "Full":
+            $DotNetVersion = Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -Recurse |
+            Get-ItemProperty -name Version, Release -EA 0 |
+            Where-Object { $_.PSChildName -eq "Full" } |
+            Select-Object @{name = ".NET Framework"; expression = { $_.PSChildName } },
+            @{name = "Product"; expression = { $Lookup[$_.Release] } },
+            Version, Release
+
+            # Output
+            [PSCustomObject]($PSVersionTable + @{
+                    ComputerName   = $Env:Computername
+                    WindowsVersion = $WindowsVersion
+                    '.Net Version' = '{0} (Version: {1}, Release: {2})' -f $DotNetVersion.Product, $DotNetVersion.Version, $DotNetVersion.Release
+                    #EnvironmentPath = $env:Path
+                })
+        }
+        else {
+            # Output
+            [PSCustomObject]($PSVersionTable + @{
+                    ComputerName = $Env:Computername
+                    #EnvironmentPath = $env:Path
+                })
+        }
     }
 
-    "[Progress] Testing On:"
+    '[Progress] Testing On:'
     Get-EnvironmentInfo
+    '[Progress] Installing Module'
     . .\Install.ps1
-    $TestFile = "TestResultsPS{0}.xml" -f $PSVersionTable.PSVersion
-    Invoke-Pester -OutputFile $TestFile
+    '[Progress] Invoking Pester'
+    Invoke-Pester -OutputFile ('TestResultsPS{0}.xml' -f $PSVersionTable.PSVersion)
 }
-else # Finalize
-{
+if ($Finalize) {
     '[Progress] Finalizing'
     $Failure = $false
     # Upload results for test page
-    $Address = 'https://ci.appveyor.com/api/testresults/nunit/{0}' -f $env:APPVEYOR_JOB_ID
-    Get-ChildItem -Path '.\TestResultsPS*.xml' | Foreach-Object {
-        $Source = $_.FullName
-        "[Output] Uploading Files: $Address, $Source"
+    $AppVeyorResultsUri = 'https://ci.appveyor.com/api/testresults/nunit/{0}' -f $env:APPVEYOR_JOB_ID
+    foreach ($TestResultsFile in Get-ChildItem -Path 'TestResultsPS*.xml') {
+        $TestResultsFilePath = $_.FullName
+        "[Output] Uploading Files: $AppVeyorResultsUri, $TestResultsFilePath"
         # Add PowerShell version to test results
-        $PSVersion = $_.Name.Replace('TestResults', '').Replace('.xml', '')
-        [xml]$Xml = Get-Content -Path $Source
-        Select-Xml -Xml $Xml -XPath '//test-case' | ForEach-Object {$_.Node.name = "$PSVersion " + $_.Node.name}
-        $Xml.OuterXml | Out-File -FilePath $Source
+        $PSVersion = $TestResultsFile.Name.Replace('TestResults', '').Replace('.xml', '')
+        [Xml]$Xml = Get-Content -Path $TestResultsFilePath
+        Select-Xml -Xml $Xml -XPath '//test-case' | ForEach-Object { $_.Node.name = "$PSVersion " + $_.Node.name }
+        $Xml.OuterXml | Out-File -FilePath $TestResultsFilePath
 
-        #Invoke-RestMethod -Method Post -Uri $Address -Body $Xml
-        [System.Net.WebClient]::new().UploadFile($Address, $Source)
+        #Invoke-RestMethod -Method Post -Uri $AppVeyorResultsUri -Body $Xml
+        [Net.WebClient]::new().UploadFile($AppVeyorResultsUri, $TestResultsFilePath)
 
-        if ($Xml.'test-results'.failures -ne '0')
-        {
+        if ($Xml.'test-results'.failures -ne '0') {
             $Failure = $true
         }
     }
-    if ($Failure)
-    {
+    if ($Failure) {
         throw 'Tests failed'
     }
 }
