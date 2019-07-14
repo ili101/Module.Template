@@ -62,4 +62,4 @@ for:
       - pwsh: '& .\Tests\AppVeyor.ps1 -Test'
       - pwsh: '& .\Tests\AppVeyor.ps1 -Finalize' # Collect and upload results
     # Skip Deploy
-    deploy_script:
+    deploy_script: []

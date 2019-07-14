@@ -57,7 +57,7 @@
     # RequiredAssemblies = @()
 
     # Script files (.ps1) that are run in the caller's environment prior to importing this module.
-    ScriptsToProcess  = @('Class.ps1')
+    ScriptsToProcess  = @('Class.ps1') # Need "Import-Module Module.Template" or implicitly importing the module to work
 
     # Type files (.ps1xml) to be loaded when importing this module
     # TypesToProcess = @()
