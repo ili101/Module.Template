@@ -86,7 +86,7 @@ if ($Finalize) {
     # Upload results for test page
     $AppVeyorResultsUri = 'https://ci.appveyor.com/api/testresults/nunit/{0}' -f $env:APPVEYOR_JOB_ID
     foreach ($TestResultsFile in Get-ChildItem -Path 'TestResultsPS*.xml') {
-        $TestResultsFilePath = $_.FullName
+        $TestResultsFilePath = $TestResultsFile.FullName
         "[Output] Uploading Files: $AppVeyorResultsUri, $TestResultsFilePath"
         # Add PowerShell version to test results
         $PSVersion = $TestResultsFile.Name.Replace('TestResults', '').Replace('.xml', '')
