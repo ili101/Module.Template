@@ -63,4 +63,4 @@ for:
       - pwsh: '& .\Tests\AppVeyor.ps1 -Finalize' # Collect and upload results
     # Skip Deploy
     deploy_script:
-      - pwsh: 'Deploy skiped on Linux'
+      - pwsh: '"Deploy skiped on Linux."'

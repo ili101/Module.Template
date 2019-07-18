@@ -96,4 +96,7 @@ if ((!$env:APPVEYOR -or $env:APPVEYOR_REPO_BRANCH -eq 'master') -and $PowerShell
         '[Info] PowerShellGallery Deploy Skipped (Version Check).'
     }
 }
+else {
+    '[Info] PowerShellGallery Deploy Skipped.'
+}
 '[Progress] Deploy Ended.'
