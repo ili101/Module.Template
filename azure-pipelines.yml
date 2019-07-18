@@ -16,6 +16,7 @@ pool:
   vmImage: 'windows-2019'
 
 steps:
+- powershell: 'Install-Module -Name Pester -Force -SkipPublisherCheck'
 - powershell: './Tests/AppVeyor.ps1 -Test'
   displayName: 'Install and Test'
 - task: PublishTestResults@2
