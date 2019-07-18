@@ -1,18 +1,23 @@
+<#
+    .SYNOPSIS
+    Handel AppVeyor Testing.
+#>
 param
 (
+    # Update AppVeyor build name.
     [Switch]$Initialize,
+    # Installs the module and invoke the Pester tests with the current version of PowerShell.
     [Switch]$Test,
+    # Upload results to AppVeyor "Tests" tab.
     [Switch]$Finalize
 )
 $ErrorActionPreference = 'Stop'
 if ($Initialize) {
-    # Update AppVeyor build
     $Psd1 = (Get-ChildItem -File -Filter *.psd1 -Name -Path (Split-Path $PSScriptRoot)).PSPath
     $ModuleVersion = (. ([Scriptblock]::Create((Get-Content -Path $Psd1 | Out-String)))).ModuleVersion
-    Update-AppveyorBuild -Version "$ModuleVersion ($env:APPVEYOR_BUILD_NUMBER) $Env:APPVEYOR_REPO_BRANCH"
+    Update-AppveyorBuild -Version "$ModuleVersion ($env:APPVEYOR_BUILD_NUMBER) $env:APPVEYOR_REPO_BRANCH"
 }
 if ($Test) {
-    # Run a test with the current version of PowerShell
     function Get-EnvironmentInfo {
         if ($null -eq $IsWindows -or $IsWindows) {
             # Get Windows Version
@@ -58,7 +63,7 @@ if ($Test) {
 
             # Output
             [PSCustomObject]($PSVersionTable + @{
-                    ComputerName   = $Env:Computername
+                    ComputerName   = $env:Computername
                     WindowsVersion = $WindowsVersion
                     '.Net Version' = '{0} (Version: {1}, Release: {2})' -f $DotNetVersion.Product, $DotNetVersion.Version, $DotNetVersion.Release
                     #EnvironmentPath = $env:Path
@@ -67,27 +72,26 @@ if ($Test) {
         else {
             # Output
             [PSCustomObject]($PSVersionTable + @{
-                    ComputerName = $Env:Computername
+                    ComputerName = $env:Computername
                     #EnvironmentPath = $env:Path
                 })
         }
     }
 
-    '[Progress] Testing On:'
+    '[Info] Testing On:'
     Get-EnvironmentInfo
-    '[Progress] Installing Module'
+    '[Progress] Installing Module.'
     . .\Install.ps1
-    '[Progress] Invoking Pester'
+    '[Progress] Invoking Pester.'
     Invoke-Pester -OutputFile ('TestResultsPS{0}.xml' -f $PSVersionTable.PSVersion)
 }
 if ($Finalize) {
-    '[Progress] Finalizing'
+    '[Progress] Finalizing.'
     $Failure = $false
-    # Upload results for test page
     $AppVeyorResultsUri = 'https://ci.appveyor.com/api/testresults/nunit/{0}' -f $env:APPVEYOR_JOB_ID
     foreach ($TestResultsFile in Get-ChildItem -Path 'TestResultsPS*.xml') {
         $TestResultsFilePath = $TestResultsFile.FullName
-        "[Output] Uploading Files: $AppVeyorResultsUri, $TestResultsFilePath"
+        "[Info] Uploading Files: $AppVeyorResultsUri, $TestResultsFilePath."
         # Add PowerShell version to test results
         $PSVersion = $TestResultsFile.Name.Replace('TestResults', '').Replace('.xml', '')
         [Xml]$Xml = Get-Content -Path $TestResultsFilePath
@@ -102,6 +106,6 @@ if ($Finalize) {
         }
     }
     if ($Failure) {
-        throw 'Tests failed'
+        throw 'Tests failed.'
     }
 }

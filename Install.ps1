@@ -1,31 +1,37 @@
-# Remove BOM from the file
-[CmdLetBinding()]
+<#
+    .SYNOPSIS
+    Installs module from Git clone or directly from GitHub.
+    File must not have BOM for GitHub deploy to work.
+#>
+[CmdletBinding(DefaultParameterSetName = 'Default')]
 Param (
-    [ValidateNotNullOrEmpty()]
-    [String]$ModuleName,
-
+    # Path to install the module to, if not provided -Scope used.
+    [Parameter(Mandatory, ParameterSetName = 'ModulePath')]
     [ValidateNotNullOrEmpty()]
     [String]$ModulePath,
 
-    [ValidateNotNullOrEmpty()]
-    [Uri]$FromGitHub,
-
+    # Path to install the module to, PSModulePath "CurrentUser" or "AllUsers", if not provided "CurrentUser" used.
+    [Parameter(Mandatory, ParameterSetName = 'Scope')]
     [ValidateSet('CurrentUser', 'AllUsers')]
     [string]
-    $Scope = 'CurrentUser'
-)
+    $Scope = 'CurrentUser',
 
-# Set Include/Exclude Files
+    # Get module from GitHub instead of local Git clone, for example "https://raw.githubusercontent.com/ili101/Module.Template/master/Install.ps1"
+    [ValidateNotNullOrEmpty()]
+    [Uri]$FromGitHub
+)
+# Set Files and Folders patterns to Include/Exclude.
 $IncludeFiles = @(
     '*.dll',
     '*.psd1',
     '*.psm1',
     '*.ps1',
-    'morelinq*'
+    'BinFolder*'
 )
 $ExcludeFiles = @(
     'Install.ps1'
 )
+
 
 function Invoke-MultiLike {
     [alias("LikeAny")]
@@ -77,7 +83,7 @@ Try {
         else {
             $ModulePathSeparator = ';'
         }
-        $ModulePath = ($Env:PSModulePath -split $ModulePathSeparator)[$ModulePathIndex]
+        $ModulePath = ($env:PSModulePath -split $ModulePathSeparator)[$ModulePathIndex]
     }
 
     # Get $ModuleName, $TargetPath, [$Links]

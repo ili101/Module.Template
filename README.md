@@ -12,7 +12,7 @@ Install-Module -Name Module.Template -Scope CurrentUser
 ```
 From GitHub
 ```PowerShell
-'https://raw.githubusercontent.com/ili101/Module.Template/master/Install.ps1'; & ([Scriptblock]::Create((irm $Uri))) -FromGitHub $Uri
+$Uri = 'https://raw.githubusercontent.com/ili101/Module.Template/master/Install.ps1'; & ([Scriptblock]::Create((irm $Uri))) -FromGitHub $Uri
 ```
 
 ## Contributing
