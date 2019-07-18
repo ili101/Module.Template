@@ -4,10 +4,11 @@
 # https://aka.ms/yaml
 
 trigger:
-  # branches:
-  #   include:
-  #   - master
-  #   - releases/*
+  branches:
+    include:
+    - '*'
+    # - master
+    # - releases/*
   paths:
     exclude:
     - '*.md'
