@@ -1,0 +1,24 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+    - master
+    - releases/*
+  paths:
+    exclude:
+    - '*.md'
+
+pool:
+  vmImage: 'windows-2019'
+
+steps:
+- powershell: './Tests/AppVeyor.ps1 -Test'
+  displayName: 'Install and Test'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'NUnit'
+    testResultsFiles: '**/Test/TestResults*.xml'
