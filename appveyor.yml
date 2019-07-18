@@ -16,6 +16,8 @@ build: off
 # Skipping commits with particular message or from specific user
 skip_commits:
   message: '/\[Skip\]/'
+  files:
+    - '*.md'
 
 # Including commits with particular message or from specific user
 #only_commits:
