@@ -24,3 +24,4 @@ steps:
   inputs:
     testResultsFormat: 'NUnit'
     testResultsFiles: '**/TestResults*.xml'
+    failTaskOnFailedTests: true
