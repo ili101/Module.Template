@@ -30,7 +30,7 @@ environment:
 
 # Scripts that run after cloning repository
 install:
-  - ps: 'Install-Module -Name Pester -Force -SkipPublisherCheck'
+  - ps: 'Install-Module -Name Pester -Force' # -SkipPublisherCheck'
   - ps: 'Install-Module -Name Assert -Force'
   # PowerShell Core
   - ps: '& .\Tests\InstallPowerShell.ps1 -Version "7.0.0-preview.2"' # Install other PowerShell Core version (Optional)
