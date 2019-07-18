@@ -4,10 +4,10 @@
 # https://aka.ms/yaml
 
 trigger:
-  branches:
-    include:
-    - master
-    - releases/*
+  # branches:
+  #   include:
+  #   - master
+  #   - releases/*
   paths:
     exclude:
     - '*.md'
@@ -16,10 +16,10 @@ pool:
   vmImage: 'windows-2019'
 
 steps:
-- powershell: 'Install-Module -Name Pester -Force -SkipPublisherCheck'
+- powershell: 'Install-Module -Name Pester -Force'
 - powershell: './Tests/AppVeyor.ps1 -Test'
   displayName: 'Install and Test'
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'NUnit'
-    testResultsFiles: '**/Test/TestResults*.xml'
+    testResultsFiles: '**/TestResults*.xml'
