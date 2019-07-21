@@ -17,7 +17,8 @@ pool:
   vmImage: 'windows-2019'
 
 steps:
-- powershell: 'Install-Module -Name Pester -Force'
+- powershell: 'Install-Module -Name Pester -Force -SkipPublisherCheck'
+  displayName: 'Update Pester'
 - powershell: './Tests/CI.ps1 -Test'
   displayName: 'Install and Test'
 
@@ -27,14 +28,13 @@ steps:
     testResultsFiles: '**/TestResults*.xml'
     failTaskOnFailedTests: true
 
-#- powershell: Write-Host "##vso[task.setvariable variable=ModulePath]This is the error"
 - powershell: './Tests/CI.ps1 -Artifact'
-- powershell: Write-Host "Hello World from $Env:ModulePath."
-# - task: CopyFiles@2
-#   inputs:
-#     contents: '_buildOutput/**'
-#     targetFolder: $(Build.ArtifactStagingDirectory)
-# - task: PublishBuildArtifacts@1
-#   inputs:
-#     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-#     ArtifactName: 'drop'
+  displayName: 'Set ModulePath for Artifact'
+- task: CopyFiles@2
+  inputs:
+    contents: $(ModulePath)
+    targetFolder: $(Build.ArtifactStagingDirectory)
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
