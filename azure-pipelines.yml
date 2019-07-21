@@ -30,11 +30,10 @@ steps:
 
 - powershell: './Tests/CI.ps1 -Artifact'
   displayName: 'Prepare Artifact'
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: '$(ModuleName)'
-
+# - task: PublishBuildArtifacts@1
+#   inputs:
+#     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#     ArtifactName: '$(ModuleName)'
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)'
