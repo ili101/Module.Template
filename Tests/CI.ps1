@@ -10,7 +10,7 @@ param
     [Switch]$Test,
     # AppVeyor Only - Upload results to AppVeyor "Tests" tab.
     [Switch]$Finalize,
-    # AppVeyor Only - Upload module as AppVeyor Artifact.
+    # AppVeyor and Azure - Upload module as AppVeyor Artifact.
     [Switch]$Artifact
 )
 $ErrorActionPreference = 'Stop'
@@ -127,6 +127,6 @@ if ($Artifact) {
     }
     elseif ($env:AGENT_NAME) {
         Write-Host "##vso[task.setvariable variable=ModuleName]$ModuleName"
-        Copy-Item -Path $ModulePath -Destination $env:Build_ArtifactStagingDirectory -Recurse
+        Copy-Item -Path (Join-Path $ModulePath $VersionLocal) -Destination C:\Users\illym\Desktop\Temp -Recurse
     }
 }
