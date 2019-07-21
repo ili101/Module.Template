@@ -126,7 +126,6 @@ if ($Artifact) {
         Push-AppveyorArtifact $ZipFileFullPath -DeploymentName $ModuleName
     }
     elseif ($env:AGENT_NAME) {
-        "env:AGENT_NAME: $env:AGENT_NAME"
-        Write-Host "##vso[task.setvariable variable=ModulePath]This is the error"
+        Write-Host "##vso[task.setvariable variable=ModulePath]$ModulePath"
     }
 }
