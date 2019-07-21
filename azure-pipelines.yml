@@ -33,7 +33,7 @@ steps:
 - powershell: Write-Host "Hello World from $Env:ModulePath."
 - task: CopyFiles@2
   inputs:
-    contents: $(ModulePath)
+    contents: $(ModulePath)*
     targetFolder: $(Build.ArtifactStagingDirectory)
 - task: PublishBuildArtifacts@1
   inputs:
