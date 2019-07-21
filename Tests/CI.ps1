@@ -126,6 +126,8 @@ if ($Artifact) {
         Push-AppveyorArtifact $ZipFileFullPath -DeploymentName $ModuleName
     }
     elseif ($env:AGENT_NAME) {
-        Write-Host "##vso[task.setvariable variable=ModulePath]$ModulePath"
+        #Write-Host "##vso[task.setvariable variable=ModulePath]$ModulePath"
+        "Build_ArtifactStagingDirectory $env:Build_ArtifactStagingDirectory"
+        Copy-Item -Path $ModulePath -Destination $env:Build_ArtifactStagingDirectory -Recurse
     }
 }
