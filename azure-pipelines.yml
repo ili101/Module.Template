@@ -30,6 +30,7 @@ steps:
 
 - powershell: './Tests/CI.ps1 -Artifact'
   displayName: 'Set ModulePath for Artifact'
+- powershell: Write-Host "Hello World from $Env:ModulePath."
 - task: CopyFiles@2
   inputs:
     contents: $(ModulePath)
