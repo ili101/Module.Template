@@ -111,16 +111,22 @@ if ($Finalize) {
         throw 'Tests failed.'
     }
 }
-if ($Artifact -and $env:APPVEYOR) {
+if ($Artifact) {
     # Get Module Info
     $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension((Get-ChildItem -File -Filter *.psm1 -Name -Path (Split-Path $PSScriptRoot)))
-    $VersionLocal = ((Get-Module -Name $ModuleName -ListAvailable).Version | Measure-Object -Maximum).Maximum
-    "[Progress] AppVeyor Artifact Start for Module: $ModuleName, Version: $VersionLocal."
-    $ZipFileName = "{0} {1} {2} {3:yyyy-MM-dd HH-mm-ss}.zip" -f $ModuleName, $VersionLocal, $env:APPVEYOR_REPO_BRANCH, (Get-Date)
-    $ZipFileFullPath = Join-Path -Path $PSScriptRoot -ChildPath $ZipFileName
-    "[Info] Artifact. $ModuleName, ZipFileName: $ZipFileName."
     $ModulePath = (Get-Module -Name $ModuleName -ListAvailable).ModuleBase | Split-Path
-    #Compress-Archive -Path $ModulePath -DestinationPath $ZipFileFullPath
-    [System.IO.Compression.ZipFile]::CreateFromDirectory($ModulePath, $ZipFileFullPath, [System.IO.Compression.CompressionLevel]::Optimal, $true)
-    Push-AppveyorArtifact $ZipFileFullPath -DeploymentName $ModuleName
+    $VersionLocal = ((Get-Module -Name $ModuleName -ListAvailable).Version | Measure-Object -Maximum).Maximum
+    "[Progress] Artifact Start for Module: $ModuleName, Version: $VersionLocal."
+    if ($env:APPVEYOR) {
+        $ZipFileName = "{0} {1} {2} {3:yyyy-MM-dd HH-mm-ss}.zip" -f $ModuleName, $VersionLocal, $env:APPVEYOR_REPO_BRANCH, (Get-Date)
+        $ZipFileFullPath = Join-Path -Path $PSScriptRoot -ChildPath $ZipFileName
+        "[Info] Artifact. $ModuleName, ZipFileName: $ZipFileName."
+        #Compress-Archive -Path $ModulePath -DestinationPath $ZipFileFullPath
+        [System.IO.Compression.ZipFile]::CreateFromDirectory($ModulePath, $ZipFileFullPath, [System.IO.Compression.CompressionLevel]::Optimal, $true)
+        Push-AppveyorArtifact $ZipFileFullPath -DeploymentName $ModuleName
+    }
+    elseif ($env:AGENT_NAME) {
+        "env:AGENT_NAME: $env:AGENT_NAME"
+        Write-Host "##vso[task.setvariable variable=ModulePath]This is the error"
+    }
 }
