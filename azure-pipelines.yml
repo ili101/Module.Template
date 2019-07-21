@@ -30,12 +30,12 @@ steps:
 
 - powershell: './Tests/CI.ps1 -Artifact'
   displayName: 'Set ModulePath for Artifact'
-- powershell: Write-Host "Hello World from $Env:ModulePath." ; Get-ChildItem $Env:ModulePath #test
+- powershell: Write-Host "Hello World from $Env:ModulePath." ; Get-ChildItem "$Env:ModulePath\1.1.0\" #test
 - task: CopyFiles@2
   inputs:
-    contents: C:\Users\VssAdministrator\Documents\WindowsPowerShell\Modules\Module.Template\**
+    contents: C:\Users\VssAdministrator\Documents\WindowsPowerShell\Modules\Module.Template\1.1.0\**
     targetFolder: $(Build.ArtifactStagingDirectory)
-  displayName: 'Set $(ModulePath)*'
+  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
