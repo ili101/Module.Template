@@ -1,29 +1,20 @@
 <#
     .SYNOPSIS
-    Deploy module.
+    Deploy module to PowerShellGallery.
 #>
-[CmdletBinding(DefaultParameterSetName = 'Default')]
+[CmdletBinding()]
 Param
 (
     # The name of the module to be deployed, if not provided the name of the .psm1 file in the root folder is used.
     [ValidateNotNullOrEmpty()]
     [String]$ModuleName,
 
-    # Deploy to PowerShellGallery.
-    [Parameter(Mandatory, ParameterSetName = 'PowerShellGallery')]
-    [Switch]$PowerShellGallery,
-
     # Key for PowerShellGallery deployment, if not provided $env:NugetApiKey is used.
-    [Parameter(ParameterSetName = 'PowerShellGallery')]
     [ValidateNotNullOrEmpty()]
     [String]$NugetApiKey,
 
     # Skip Version verification for PowerShellGallery deployment, can be used for first release.
-    [Parameter(ParameterSetName = 'PowerShellGallery')]
-    [Switch]$Force,
-
-    # Upload module as AppVeyor Artifact.
-    [Switch]$AppVeyorZip
+    [Switch]$Force
 )
 $ErrorActionPreference = 'Stop'
 
@@ -48,19 +39,8 @@ if (!$ModuleName) {
 $VersionLocal = ((Get-Module -Name $ModuleName -ListAvailable).Version | Measure-Object -Maximum).Maximum
 "[Progress] Deploy Script Start for Module: $ModuleName, Version: $VersionLocal."
 
-# Upload module as AppVeyor Artifact.
-if ($env:APPVEYOR -and $AppVeyorZip) {
-    $ZipFileName = "{0} {1} {2} {3:yyyy-MM-dd HH-mm-ss}.zip" -f $ModuleName, $VersionLocal, $env:APPVEYOR_REPO_BRANCH, (Get-Date)
-    $ZipFileFullPath = Join-Path -Path $ScriptRoot -ChildPath $ZipFileName
-    "[Info] AppVeyorZip. $ModuleName, ZipFileName: $ZipFileName."
-    $ModulePath = (Get-Module -Name $ModuleName -ListAvailable).ModuleBase | Split-Path
-    #Compress-Archive -Path $ModulePath -DestinationPath $ZipFileFullPath
-    [System.IO.Compression.ZipFile]::CreateFromDirectory($ModulePath, $ZipFileFullPath, [System.IO.Compression.CompressionLevel]::Optimal, $true)
-    Push-AppveyorArtifact $ZipFileFullPath -DeploymentName $ModuleName
-}
-
 # Deploy to PowerShell Gallery if run locally OR from AppVeyor & GitHub master
-if ((!$env:APPVEYOR -or $env:APPVEYOR_REPO_BRANCH -eq 'master') -and $PowerShellGallery) {
+if (!$env:APPVEYOR -or $env:APPVEYOR_REPO_BRANCH -eq 'master') {
     if ($env:APPVEYOR) {
         $Success = $true
         $AppVeyorProject = Invoke-RestMethod -Uri "https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG"

@@ -1,15 +1,17 @@
 <#
     .SYNOPSIS
-    Handel AppVeyor Testing.
+    Handel Continuous Integration Testing in AppVeyor and Azure DevOps Pipelines.
 #>
 param
 (
-    # Update AppVeyor build name.
+    # AppVeyor Only - Update AppVeyor build name.
     [Switch]$Initialize,
     # Installs the module and invoke the Pester tests with the current version of PowerShell.
     [Switch]$Test,
-    # Upload results to AppVeyor "Tests" tab.
-    [Switch]$Finalize
+    # AppVeyor Only - Upload results to AppVeyor "Tests" tab.
+    [Switch]$Finalize,
+    # AppVeyor Only - Upload module as AppVeyor Artifact.
+    [Switch]$Artifact
 )
 $ErrorActionPreference = 'Stop'
 if ($Initialize) {
@@ -108,4 +110,17 @@ if ($Finalize) {
     if ($Failure) {
         throw 'Tests failed.'
     }
+}
+if ($Artifact -and $env:APPVEYOR) {
+    # Get Module Info
+    $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension((Get-ChildItem -File -Filter *.psm1 -Name -Path (Split-Path $PSScriptRoot)))
+    $VersionLocal = ((Get-Module -Name $ModuleName -ListAvailable).Version | Measure-Object -Maximum).Maximum
+    "[Progress] AppVeyor Artifact Start for Module: $ModuleName, Version: $VersionLocal."
+    $ZipFileName = "{0} {1} {2} {3:yyyy-MM-dd HH-mm-ss}.zip" -f $ModuleName, $VersionLocal, $env:APPVEYOR_REPO_BRANCH, (Get-Date)
+    $ZipFileFullPath = Join-Path -Path $PSScriptRoot -ChildPath $ZipFileName
+    "[Info] Artifact. $ModuleName, ZipFileName: $ZipFileName."
+    $ModulePath = (Get-Module -Name $ModuleName -ListAvailable).ModuleBase | Split-Path
+    #Compress-Archive -Path $ModulePath -DestinationPath $ZipFileFullPath
+    [System.IO.Compression.ZipFile]::CreateFromDirectory($ModulePath, $ZipFileFullPath, [System.IO.Compression.CompressionLevel]::Optimal, $true)
+    Push-AppveyorArtifact $ZipFileFullPath -DeploymentName $ModuleName
 }

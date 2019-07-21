@@ -18,10 +18,22 @@ pool:
 
 steps:
 - powershell: 'Install-Module -Name Pester -Force'
-- powershell: './Tests/AppVeyor.ps1 -Test'
+- powershell: './Tests/CI.ps1 -Test'
   displayName: 'Install and Test'
+
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'NUnit'
     testResultsFiles: '**/TestResults*.xml'
     failTaskOnFailedTests: true
+
+- powershell: Write-Host "##vso[task.setvariable variable=ModulePath]This is the error"
+- powershell: Write-Host "Hello World from $Env:ModulePath."
+# - task: CopyFiles@2
+#   inputs:
+#     contents: '_buildOutput/**'
+#     targetFolder: $(Build.ArtifactStagingDirectory)
+# - task: PublishBuildArtifacts@1
+#   inputs:
+#     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#     ArtifactName: 'drop'
