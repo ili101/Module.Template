@@ -127,6 +127,6 @@ if ($Artifact) {
     }
     elseif ($env:AGENT_NAME) {
         Write-Host "##vso[task.setvariable variable=ModuleName]$ModuleName"
-        Copy-Item -Path (Join-Path $ModulePath $VersionLocal) -Destination C:\Users\illym\Desktop\Temp -Recurse
+        Copy-Item -Path (Join-Path $ModulePath $VersionLocal) -Destination $env:Build_ArtifactStagingDirectory -Recurse
     }
 }
