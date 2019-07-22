@@ -16,19 +16,22 @@ From GitHub
 $Uri = 'https://raw.githubusercontent.com/ili101/Module.Template/master/Install.ps1'; & ([Scriptblock]::Create((irm $Uri))) -FromGitHub $Uri
 ```
 
-## Test-Q
+## Instructions
 Returns Q
 
-#### Examples:
+## Examples:
 [Test-Q.Examples.ps1](https://github.com/ili101/Module.Template/blob/master/Examples/Test-Q.Examples.ps1)
 ```PowerShell
 Test-Q
 ```
 
+##  Changelog
+[CHANGELOG.md](https://github.com/ili101/Join-Object/blob/master/CHANGELOG.md)
+
 ## Contributing
 If you fund a bug or added functionality or anything else just fork and send pull requests. Thank you!
 
-#### To do:
-* Stuff
+## To do
+* Noting for now, You can open an Issues if something is needed.
 
 ![](https://raw.githubusercontent.com/ili101/Module.Template/master/Examples/Example1.png)
