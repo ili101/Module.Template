@@ -18,7 +18,7 @@ $Uri = 'https://raw.githubusercontent.com/ili101/Module.Template/master/Install.
 
 ## Instructions
 Returns Q
-8
+10
 
 ## Examples:
 [Test-Q.Examples.ps1](https://github.com/ili101/Module.Template/blob/master/Examples/Test-Q.Examples.ps1)
