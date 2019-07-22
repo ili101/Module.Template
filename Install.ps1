@@ -119,7 +119,7 @@ Try {
             $TargetPathItem = Join-Path -Path $TargetPath -ChildPath $Link.name
             if ($Link.type -ne 'dir') {
                 $WebClient.DownloadFile($Link.download_url, $TargetPathItem)
-                Write-Verbose -Message ('Installed module file: "{1}"' -f $Link.name)
+                Write-Verbose -Message ('Installed module file: "{0}"' -f $Link.name)
             }
             else {
                 if (-not (Test-Path -Path $TargetPathItem)) {
@@ -164,7 +164,7 @@ Try {
     Write-Verbose -Message "Module installed"
 }
 Catch {
-    throw ('Failed installing the module "{0}": {1} in Line {2}' -f $ModuleName, $_, $_.InvocationInfo.ScriptLineNumber)
+    throw ('Failed installing the module "{0}". Error: "{1}" in Line {2}' -f $ModuleName, $_, $_.InvocationInfo.ScriptLineNumber)
 }
 finally {
     #if ($FromGitHub) {

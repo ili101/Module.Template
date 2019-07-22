@@ -1,5 +1,6 @@
 # Module.Template
-Powershell Module Template with GitHub, PowerShellGallery and AppVeyor.
+Powershell Module Template with GitHub, PowerShellGallery, AppVeyor and Azure DevOps Pipelines integration.<BR />
+Can be used as a starting point for your open source Module.
 
 | Master | PowerShell Gallery | Beta | Alpha |
 |--------|--------------------|------|-------|
