@@ -20,9 +20,6 @@ trigger:
   paths:
     exclude:
     - README.md
-    - LICENSE
-    - .gitignore
-    - .github/*
 
 pool:
   vmImage: 'windows-2019'
