@@ -2,12 +2,18 @@
     .SYNOPSIS
     Deploy module to PowerShellGallery.
 #>
-[CmdletBinding()]
+[CmdletBinding(DefaultParameterSetName = 'ModuleName')]
 Param
 (
-    # The name of the module to be deployed, if not provided the name of the .psm1 file in the root folder is used.
+    # The name of the module to be deployed, if not provided the name of the .psm1 file in the parent folder is used.
+    [Parameter(ParameterSetName = 'ModuleName')]
     [ValidateNotNullOrEmpty()]
     [String]$ModuleName,
+
+    # Publish module from path, if not provided the installed module is used.
+    [Parameter(Mandatory, ParameterSetName = 'Path')]
+    [ValidateNotNullOrEmpty()]
+    [String]$Path,
 
     # Key for PowerShellGallery deployment, if not provided $env:NugetApiKey is used.
     [ValidateNotNullOrEmpty()]
@@ -19,24 +25,32 @@ Param
 $ErrorActionPreference = 'Stop'
 
 # Get Script Root
-if ($PSScriptRoot) {
-    $ScriptRoot = $PSScriptRoot
-}
-elseif ($psISE.CurrentFile.IsUntitled -eq $false) {
-    $ScriptRoot = Split-Path -Path $psISE.CurrentFile.FullPath
-}
-elseif ($null -ne $psEditor.GetEditorContext().CurrentFile.Path -and $psEditor.GetEditorContext().CurrentFile.Path -notlike 'untitled:*') {
-    $ScriptRoot = Split-Path -Path $psEditor.GetEditorContext().CurrentFile.Path
+if ($Path) {
+    $Psd1Path = (Get-ChildItem -File -Filter *.psd1 -Path $Path -Recurse)[0].FullName
+    $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension($Psd1Path)
+    $VersionLocal = (. ([Scriptblock]::Create((Get-Content -Path $Psd1Path | Out-String)))).ModuleVersion
 }
 else {
-    $ScriptRoot = '.'
+    if ($PSScriptRoot) {
+        $ScriptRoot = $PSScriptRoot
+    }
+    elseif ($psISE.CurrentFile.IsUntitled -eq $false) {
+        $ScriptRoot = Split-Path -Path $psISE.CurrentFile.FullPath
+    }
+    elseif ($null -ne $psEditor.GetEditorContext().CurrentFile.Path -and $psEditor.GetEditorContext().CurrentFile.Path -notlike 'untitled:*') {
+        $ScriptRoot = Split-Path -Path $psEditor.GetEditorContext().CurrentFile.Path
+    }
+    else {
+        $ScriptRoot = '.'
+    }
+
+    # Get Module Info
+    if (!$ModuleName) {
+        $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension((Get-ChildItem -File -Filter *.psm1 -Name -Path (Split-Path $ScriptRoot)))
+    }
+    $VersionLocal = ((Get-Module -Name $ModuleName -ListAvailable).Version | Measure-Object -Maximum).Maximum
 }
 
-# Get Module Info
-if (!$ModuleName) {
-    $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension((Get-ChildItem -File -Filter *.psm1 -Name -Path (Split-Path $ScriptRoot)))
-}
-$VersionLocal = ((Get-Module -Name $ModuleName -ListAvailable).Version | Measure-Object -Maximum).Maximum
 "[Progress] Deploy Script Start for Module: $ModuleName, Version: $VersionLocal."
 
 # Deploy to PowerShell Gallery if run locally OR from AppVeyor & GitHub master
@@ -70,7 +84,12 @@ if (!$env:APPVEYOR -or $env:APPVEYOR_REPO_BRANCH -eq 'master') {
             $NugetApiKey = $env:NugetApiKey
         }
         "[Info] PowerShellGallery. Deploying $ModuleName version $VersionLocal."
-        Publish-Module -Name $ModuleName -NuGetApiKey $NugetApiKey -RequiredVersion $VersionLocal
+        if ($Path) {
+            Publish-Module -NuGetApiKey $NugetApiKey -Path $Psd1Path
+        }
+        else {
+            Publish-Module -NuGetApiKey $NugetApiKey -Name $ModuleName  -RequiredVersion $VersionLocal
+        }
     }
     else {
         '[Info] PowerShellGallery Deploy Skipped (Version Check).'

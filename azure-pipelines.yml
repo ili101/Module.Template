@@ -33,12 +33,8 @@ steps:
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)'
-    artifact: 'Module'
+    artifact: 'Modules'
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.SourcesDirectory)'
-    artifact: 'SourceB'
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(Agent.BuildDirectory)'
-    artifact: 'SourceA'
+    artifact: 'Source'
