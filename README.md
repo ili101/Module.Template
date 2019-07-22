@@ -16,9 +16,6 @@ From GitHub
 $Uri = 'https://raw.githubusercontent.com/ili101/Module.Template/master/Install.ps1'; & ([Scriptblock]::Create((irm $Uri))) -FromGitHub $Uri
 ```
 
-## Contributing
-If you fund a bug or added functionality or anything else just fork and send pull requests. Thank you!
-
 ## Test-Q
 Returns Q
 
@@ -27,6 +24,9 @@ Returns Q
 ```PowerShell
 Test-Q
 ```
+
+## Contributing
+If you fund a bug or added functionality or anything else just fork and send pull requests. Thank you!
 
 #### To do:
 * Stuff

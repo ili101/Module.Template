@@ -97,7 +97,7 @@ Try {
         $GitBranch = $FromGitHub.AbsolutePath.Split('/')[3]
         $Links = (Invoke-RestMethod -Uri "https://api.github.com/repos/$GitUri/contents" -Body @{ref = $GitBranch }) | Where-Object { (LikeAny $_.name $IncludeFiles) -and (LikeAny $_.name $ExcludeFiles -Not) }
 
-        $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension(($Links | Where-Object { $_.name -like '*.psm1' }))
+        $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension(($Links | Where-Object { $_.name -like '*.psm1' }).name)
         $ModuleVersion = (. ([Scriptblock]::Create((Invoke-WebRequest -Uri ($Links | Where-Object { $_.name -eq "$ModuleName.psd1" }).download_url)))).ModuleVersion
     }
     else {
@@ -164,7 +164,7 @@ Try {
     Write-Verbose -Message "Module installed"
 }
 Catch {
-    throw ('Failed installing the module "{0}". Error: "{1}" in Line {2}' -f $ModuleName, $_, $_.InvocationInfo.ScriptLineNumber)
+    throw ('Failed installing module "{0}". Error: "{1}" in Line {2}' -f $ModuleName, $_, $_.InvocationInfo.ScriptLineNumber)
 }
 finally {
     #if ($FromGitHub) {
