@@ -5,12 +5,12 @@
 [CmdletBinding(DefaultParameterSetName = 'ModuleName')]
 Param
 (
-    # The name of the module to be deployed, if not provided the name of the .psm1 file in the parent folder is used.
+    # The name of the installed module to be deployed, if not provided the name of the .psm1 file in the parent folder is used.
     [Parameter(ParameterSetName = 'ModuleName')]
     [ValidateNotNullOrEmpty()]
     [String]$ModuleName,
 
-    # Publish module from path, if not provided the installed module is used.
+    # Publish module from path, if not provided -ModuleName is used.
     [Parameter(Mandatory, ParameterSetName = 'Path')]
     [ValidateNotNullOrEmpty()]
     [String]$Path,
