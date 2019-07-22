@@ -19,7 +19,7 @@ trigger:
     - '*'
   paths:
     exclude:
-    - README.md
+    - '*.md'
 
 pool:
   vmImage: 'windows-2019'
