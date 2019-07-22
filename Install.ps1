@@ -102,7 +102,7 @@ Try {
     }
     else {
         $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension((Get-ChildItem -File -Filter *.psm1 -Name -Path $PSScriptRoot))
-        $ModuleVersion = (. ([Scriptblock]::Create((Get-Content -Path "$PSScriptRoot\$ModuleName.psd1" | Out-String)))).ModuleVersion
+        $ModuleVersion = (. ([Scriptblock]::Create((Get-Content -Path (Join-Path $PSScriptRoot "$ModuleName.psd1") | Out-String)))).ModuleVersion
     }
     $TargetPath = Join-Path -Path $ModulePath -ChildPath $ModuleName
     $TargetPath = Join-Path -Path $TargetPath -ChildPath $ModuleVersion
