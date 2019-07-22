@@ -16,8 +16,7 @@
 trigger:
   branches:
     include:
-    - Beta
-    - dev
+    - '*'
   paths:
     exclude:
     - README.md
