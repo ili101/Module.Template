@@ -3,15 +3,27 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+# trigger:
+#   branches:
+#     include:
+#     - '*'
+#     # - master
+#     # - releases/*
+#   paths:
+#     exclude:
+#     - '*.md'
+
 trigger:
   branches:
     include:
-    - '*'
-    # - master
-    # - releases/*
+    - Beta
+    - dev
   paths:
     exclude:
-    - '*.md'
+    - README.md
+    - LICENSE
+    - .gitignore
+    - .github/*
 
 pool:
   vmImage: 'windows-2019'
