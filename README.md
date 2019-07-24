@@ -17,8 +17,13 @@ $Uri = 'https://raw.githubusercontent.com/ili101/Module.Template/master/Install.
 ```
 
 ## Instructions
-1. Create a GitHub Repository (Recommended name is the name of the Module)
-2.
+1. Create a GitHub Repository (Recommended name is the name of the Module) and clone the repository with VSCode.
+2. Clone or download this repository and copy the files to your repository clone.
+3. Remove/Replace/Edit/Rename the files `Module.Template.psm1`, `Module.Template.psm1`, `Test-Q.ps1` with your module files.
+4. Remove/Replace/Edit/Rename the file `Tests\Test-Q.Tests.ps1` with test for your Module, you can create multiple test files in the folder ending with **.Tests.ps1**.
+5. To AppVeyor create an account in https://www.appveyor.com/ and connect it to the GitHub repository, the `appveyor.yml` file is used for the configuration.
+
+
 [skip azp][skip av]
 
 ##  Changelog
