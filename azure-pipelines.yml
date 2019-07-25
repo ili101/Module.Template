@@ -15,7 +15,7 @@ trigger:
     - CHANGELOG.md
 
 jobs:
-  - job: windows-2019
+  - job: windows2019
     pool:
       vmImage: 'windows-2019'
 
@@ -42,7 +42,7 @@ jobs:
         targetPath: '$(Build.SourcesDirectory)'
         artifact: 'Source'
 
-  - job: ubuntu-16.04
+  - job: ubuntu1604
     pool:
       vmImage: 'ubuntu-16.04'
 
