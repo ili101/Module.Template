@@ -30,7 +30,11 @@
     Copyright         = '(c) 2017 ili. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description       = 'Powershell Module Template with GitHub, PowerShellGallery and AppVeyor.'
+    Description       = @'
+Powershell Module Template with GitHub, PowerShellGallery, AppVeyor and Azure DevOps Pipelines integration.
+Can be used as a starting point for your open source Module.
+For instructions see https://github.com/ili101/Module.Template/blob/master/README.md
+'@
 
     # Minimum version of the Windows PowerShell engine required by this module
     # PowerShellVersion = ''
@@ -95,7 +99,7 @@
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags         = @('Module', 'Template', 'GitHub', 'PowerShellGallery', 'AppVeyor')
+            Tags         = @('Module', 'Template', 'GitHub', 'PowerShellGallery', 'AppVeyor', 'Azure DevOps Pipelines')
 
             # A URL to the license for this module.
             # LicenseUri = ''
