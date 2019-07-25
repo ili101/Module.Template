@@ -23,11 +23,6 @@ skip_commits:
 #only_commits:
 #  message: '/\[build\]/' # Start a new build if message contains 'build'
 
-# Powershell Gallery deploy Key
-environment:
-  NugetApiKey:
-    secure: K+vkseiHQEbiNnvY20ZSYA+Jl0fSAbfyWc1/454xA3FgZRIRUw5vDPG2eyFFc5lj
-
 # Scripts that run after cloning repository
 install:
   - ps: 'Install-Module -Name Pester -Force -SkipPublisherCheck'
