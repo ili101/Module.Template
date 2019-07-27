@@ -49,17 +49,19 @@ for:
     matrix:
       only:
         - image: Ubuntu1804
+    # Install other PowerShell Core version (Optional)
+    init:
+      - sh: 'sudo apt-get install -y powershell-preview && sudo rm /usr/bin/pwsh && sudo ln -s /opt/microsoft/powershell/7-preview/pwsh /usr/bin/pwsh'
     # Scripts that run after cloning repository
     install:
-      - sh: 'sudo apt-get update && sudo apt-get install -y powershell-preview && sudo rm /usr/bin/pwsh && sudo ln -s /opt/microsoft/powershell/7-preview/pwsh /usr/bin/pwsh' # Install other PowerShell Core version (Optional)
       - pwsh: '& .\Tests\CI.ps1 -Initialize' # Set AppVeyor build version
       - pwsh: 'Install-Module -Name Pester -Force'
       - pwsh: 'Install-Module -Name Assert -Force'
+      - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
     # To run your custom scripts instead of automatic tests
     test_script:
       - pwsh: '& .\Tests\CI.ps1 -Test'
       - pwsh: '& .\Tests\CI.ps1 -Finalize' # Collect and upload results
-      - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
     # Skip Deploy
     deploy_script:
       - pwsh: '"Deploy skiped on Linux."'
