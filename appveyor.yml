@@ -51,7 +51,7 @@ for:
         - image: Ubuntu1804
     # Install other PowerShell Core version (Optional)
     init:
-      - sh: 'sudo apt-get install -y powershell-preview && sudo rm /usr/bin/pwsh && sudo ln -s /opt/microsoft/powershell/7-preview/pwsh /usr/bin/pwsh'
+      - sh: 'sudo apt-get install -y powershell-preview && sudo rm /usr/bin/pwsh && sudo ln -s /opt/microsoft/powershell/7-preview/pwsh /usr/bin/pwsh && sudo apt-get -qq update'
     # Scripts that run after cloning repository
     install:
       - pwsh: '& .\Tests\CI.ps1 -Initialize' # Set AppVeyor build version
