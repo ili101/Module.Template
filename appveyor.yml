@@ -59,6 +59,7 @@ for:
     test_script:
       - pwsh: '& .\Tests\CI.ps1 -Test'
       - pwsh: '& .\Tests\CI.ps1 -Finalize' # Collect and upload results
+      - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
     # Skip Deploy
     deploy_script:
       - pwsh: '"Deploy skiped on Linux."'
