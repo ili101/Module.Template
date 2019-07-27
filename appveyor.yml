@@ -49,10 +49,11 @@ for:
     matrix:
       only:
         - image: Ubuntu1804
+    init:
+      - sh: 'sudo apt-get update && sudo apt-get install -y powershell-preview && sudo rm /usr/bin/pwsh && sudo ln -s /opt/microsoft/powershell/7-preview/pwsh /usr/bin/pwsh' # Install other PowerShell Core version (Optional)
     # Scripts that run after cloning repository
     install:
       - pwsh: '& .\Tests\CI.ps1 -Initialize' # Set AppVeyor build version
-      - sh: 'sudo apt-get update && sudo apt-get install -y powershell-preview && sudo rm /usr/bin/pwsh && sudo ln -s /opt/microsoft/powershell/7-preview/pwsh /usr/bin/pwsh' # Install other PowerShell Core version (Optional)
       - pwsh: 'Install-Module -Name Pester -Force'
       - pwsh: 'Install-Module -Name Assert -Force'
     # To run your custom scripts instead of automatic tests
