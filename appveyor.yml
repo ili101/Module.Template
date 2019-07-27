@@ -51,7 +51,7 @@ for:
         - image: Ubuntu1804
     # Install other PowerShell Core version (Optional)
     init:
-      - sh: 'sudo apt-get -qq update && sudo apt-get install -qy powershell-preview && sudo rm /usr/bin/pwsh && sudo ln -s /opt/microsoft/powershell/7-preview/pwsh /usr/bin/pwsh'
+      - sh: 'sudo apt-get -qq update && sudo apt-get install -qq powershell-preview && sudo rm /usr/bin/pwsh && sudo ln -s /opt/microsoft/powershell/7-preview/pwsh /usr/bin/pwsh'
       - sh: 'export LANG=en_US.UTF-8' # Fix for PowerShell 7.0.0-preview.2, Remove if using other version.
     # Scripts that run after cloning repository
     install:
