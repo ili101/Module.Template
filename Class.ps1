@@ -1,8 +1,8 @@
-class Base64q
+class Base64Script
 {
     [string]$ItemName
 
-    Base64q([string]$String)
+    Base64Script([string]$String)
     {
         $this.ItemName = $String
     }

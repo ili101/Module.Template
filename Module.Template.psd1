@@ -30,7 +30,11 @@
     Copyright         = '(c) 2017 ili. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description       = 'Powershell Module Template with GitHub, PowerShellGallery and AppVeyor.'
+    Description       = @'
+Powershell Module Template with GitHub, PowerShellGallery, AppVeyor and Azure DevOps Pipelines integration.
+Can be used as a starting point for your open source Module.
+For instructions see https://github.com/ili101/Module.Template/blob/master/README.md
+'@
 
     # Minimum version of the Windows PowerShell engine required by this module
     # PowerShellVersion = ''
@@ -57,7 +61,7 @@
     # RequiredAssemblies = @()
 
     # Script files (.ps1) that are run in the caller's environment prior to importing this module.
-    ScriptsToProcess  = @('Class.ps1')
+    ScriptsToProcess  = @('Class.ps1') # Need "Import-Module Module.Template" or implicitly importing the module to work
 
     # Type files (.ps1xml) to be loaded when importing this module
     # TypesToProcess = @()
@@ -75,7 +79,7 @@
     CmdletsToExport   = @()
 
     # Variables to export from this module
-    VariablesToExport = 'Base64qV'
+    VariablesToExport = @()
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
     AliasesToExport   = @()
@@ -95,7 +99,7 @@
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags         = @('Module', 'Template', 'GitHub', 'PowerShellGallery', 'AppVeyor')
+            Tags         = @('Module', 'Template', 'GitHub', 'PowerShellGallery', 'AppVeyor', 'Azure DevOps Pipelines')
 
             # A URL to the license for this module.
             # LicenseUri = ''
