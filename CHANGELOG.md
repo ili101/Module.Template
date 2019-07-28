@@ -1,4 +1,4 @@
-## 2.0.0 - 2019/07/28
+## 2.0.1 - 2019/07/28
 ### Added
 * Linux support.
 * Azure DevOps Pipelines test support.
