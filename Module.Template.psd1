@@ -99,7 +99,7 @@ For instructions see https://github.com/ili101/Module.Template/blob/master/READM
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags         = @('Module', 'Template', 'GitHub', 'PowerShellGallery', 'AppVeyor', 'Azure DevOps Pipelines')
+            Tags         = @('Module', 'Template', 'GitHub', 'PowerShellGallery', 'Gallery', 'AppVeyor', 'Azure', 'DevOps', 'Pipelines')
 
             # A URL to the license for this module.
             # LicenseUri = ''
