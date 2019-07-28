@@ -1,3 +1,15 @@
+## 2.0.0 - 2019/07/28
+### Added
+* Linux support.
+* Azure DevOps Pipelines test support.
+* PowerShell Preview support.
+* Publish from Azure option.
+* README.md now have instructions.
+### Changes
+* Triggers ignore .md files and skip tags [skip azp] (for Azure) and/or [skip av] (for AppVeyor).
+### Fixed
+* Many fixes and code cleanup.
+
 ## 1.1.0 - 2018/09/30
 ### Added
 * PowerShell Core support.
