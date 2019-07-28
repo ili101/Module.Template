@@ -10,7 +10,7 @@ Param
     [ValidateNotNullOrEmpty()]
     [String]$ModuleName,
 
-    # Publish module from path, if not provided -ModuleName is used.
+    # Publish module from path (module folder), if not provided -ModuleName is used.
     [Parameter(Mandatory, ParameterSetName = 'Path')]
     [ValidateNotNullOrEmpty()]
     [String]$Path,
@@ -24,13 +24,17 @@ Param
 )
 $ErrorActionPreference = 'Stop'
 
-# Get Script Root
 if ($Path) {
+    $Path = Resolve-Path -Path $Path
+    if ($Path.Count -ne 1) {
+        throw ('Invalid Path, $Path.Count: {0}.' -f $Path.Count)
+    }
     $Psd1Path = (Get-ChildItem -File -Filter *.psd1 -Path $Path -Recurse)[0].FullName
     $ModuleName = [System.IO.Path]::GetFileNameWithoutExtension($Psd1Path)
     $VersionLocal = (. ([Scriptblock]::Create((Get-Content -Path $Psd1Path | Out-String)))).ModuleVersion
 }
 else {
+    # Get Script Root
     if ($PSScriptRoot) {
         $ScriptRoot = $PSScriptRoot
     }
@@ -85,7 +89,7 @@ if (!$env:APPVEYOR -or $env:APPVEYOR_REPO_BRANCH -eq 'master') {
         }
         "[Info] PowerShellGallery. Deploying $ModuleName version $VersionLocal."
         if ($Path) {
-            Publish-Module -NuGetApiKey $NugetApiKey -Path $Psd1Path
+            Publish-Module -NuGetApiKey $NugetApiKey -Path $Path
         }
         else {
             Publish-Module -NuGetApiKey $NugetApiKey -Name $ModuleName  -RequiredVersion $VersionLocal
