@@ -20,11 +20,13 @@ $Uri = 'https://raw.githubusercontent.com/ili101/Module.Template/master/Install.
 ### Setup
 1. Create a GitHub Repository (Recommended name is the name of the Module) and clone the repository with VSCode.
 2. Clone or download this repository and copy the files to your repository clone.
-3. Remove/Replace/Edit/Rename the files `Module.Template.psm1`, `Module.Template.psm1`, `Test-Q.ps1` with your module files.
+3. Remove/Replace/Edit/Rename the files `Module.Template.psm1`, `Module.Template.psm1`, `Test-Q.ps1`, `Class.ps1` with your module files.
 4. Remove/Replace/Edit/Rename the file `Tests\Test-Q.Tests.ps1` with tests for your Module, you can create multiple test files in the folder ending with **.Tests.ps1**.
-5. To use AppVeyor create an account on https://www.appveyor.com/ and connect it to the GitHub repository, the `appveyor.yml` file is used for the configuration.
-6. To use Azure DevOps Pipelines create an account on https://dev.azure.com and connect it to the GitHub repository, the `azure-pipelines.yml` file is used for the configuration.
-### Configuration and usage
+5. Edit `README.md`, `CHANGELOG.md` and the `Examples` folder to provide documentation for the Module.
+6. `Install.ps1` is used to "build" the module and put it in the PowerShell Modules folder, adjust the `$IncludeFiles` and `$ExcludeFiles` variables if needed to configure which files and folders to copy from the source root folder. Can be used locally by executing `Install.ps1` or remotely from GitHub by the Install command mentiond in the `README.md`. (Also used in the CI procedure).
+7. To use AppVeyor create an account on https://www.appveyor.com/ and connect it to the GitHub repository, the `appveyor.yml` file is used for the configuration.
+8. To use Azure DevOps Pipelines create an account on https://dev.azure.com and connect it to the GitHub repository, the `azure-pipelines.yml` file is used for the configuration.
+### CI Configuration and usage
 **Triggers** - When Pushing a Commit to GitHub AppVeyor and Azure will be triggered unless the Commit contain only changes to the **.md** files or the skip tags [skip azp] (for Azure) and/or [skip av] (for AppVeyor) are added to the Commit name.<BR />
 This behavior can be adjusted in the .yml files (`azure-pipelines.yml` do not support wildcards in the file names under trigger:paths:exclude).<BR />
 Additionally to run a quick test locally in VSCode click F5 (verify debug is set to "PowerShell Pester Tests" in the debug section, this is set in `.vscode\launch.json`)
