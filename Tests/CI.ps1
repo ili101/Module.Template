@@ -83,7 +83,7 @@ if ($Test) {
     '[Info] Testing On:'
     Get-EnvironmentInfo
     '[Progress] Installing Module.'
-    . .\Install.ps1 -Verbose
+    . .\Install.ps1
     '[Progress] Invoking Pester.'
     Invoke-Pester -OutputFile ('TestResultsPS{0}.xml' -f $PSVersionTable.PSVersion)
 }
