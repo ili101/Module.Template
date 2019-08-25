@@ -85,6 +85,9 @@ Try {
         }
         $ModulePath = ($env:PSModulePath -split $ModulePathSeparator)[$ModulePathIndex]
     }
+    Write-Verbose -Message "PSModulePath $env:PSModulePath"
+    Write-Verbose -Message "PSModulePath $ModulePath"
+
 
     # Get $ModuleName, $TargetPath, [$Links]
     if ($FromGitHub) {
