@@ -1,3 +1,9 @@
+## 2.0.2 - 2019/08/26
+### Added
+* macOS support.
+* Azure Test on macOS, Ubuntu and Windows PowerShell Core.
+* Azure Badges.
+
 ## 2.0.1 - 2019/07/28
 ### Added
 * Linux support.
