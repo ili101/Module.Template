@@ -60,7 +60,7 @@ To publish click "Create a new release" and select the Build version containing 
 1. You can also run `Tests\Publish.ps1` locally with `-NugetApiKey <Key>`
 
 **Publish to Docker Hub** - You can also publish the Module to Docker Hub (Can be good for testing new builds). You can optionally modify the Docker build by editing `Tests\Dockerfile`.
-The steps are the same as the PowerShell Gallery publish. In Azure > Releases import `Tests\Azure Docker config.json`, Recreate "Artifacts" so it point to your Project, If something show in red fix it (Set the OS to Windows or Linux according to the OS configured in `Tests\Dockerfile`), You can delete the `Tests\Azure Docker config.json` file.
+The steps are the same as the PowerShell Gallery publish. In Azure > Releases import `Tests\Azure Docker config.json`, Recreate "Artifacts" so it point to your Project, If something show in red fix it (Set the OS to Windows or Linux according to the OS configured in `Tests\Dockerfile`), In "Docker Stage" > "buildAndPush" > "Container registry" set your Docker Hub credentials. You can delete the `Tests\Azure Docker config.json` file.
 
 ##  Changelog
 [CHANGELOG.md](https://github.com/ili101/Join-Object/blob/master/CHANGELOG.md)
