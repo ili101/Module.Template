@@ -47,15 +47,20 @@ Azure test on Windows Framework and Ubuntu, add/remove jobs in the .yml file to 
 
 **Artifacts** - Artifacts are Zip files created for later use, Artifact with the Windows Framework Module is uploaded to the AppVeyor Artifacts tab by the `.\Tests\CI.ps1 -Artifact` line, Artifact with the Windows Framework Module and Artifact with the Git Source is uploaded to Azure by the `.\Tests\CI.ps1 -Artifact` segment.
 
-**Publish** - You can publish the Module to the PowerShell Gallery in 3 ways.<BR />
+**Publish to PowerShell Gallery** - You can publish the Module to the PowerShell Gallery in 3 ways:<BR />
 1. AppVeyor will publish the module automatically if the commit is made in the GitHub master branch and the module version in the .psd file is newer from the version in the gallery.<BR />
 For this to work you need to go to [AppVeyor](https://www.appveyor.com/) > project > settings and under Environment add an "encrypted" environment variable named "NugetApiKey" with your PowerShell Gallery Key.<BR />
 To disable this comment out the `- ps: '$null = Install-PackageProvider -Name NuGet -Force ; & .\Tests\Publish.ps1'` line
 
-2. In Azure you can publish the module manually from an Artifacts. For this to work you need to configure a "Releases" in Azure, I didn't find a way to configure it in the .yml, but I exported it to json `Tests\Azure Publish config.json`, import it in [Azure](https://dev.azure.com) > Releases (You may need to create an empty releases, save it, view releases, New > Import and delete the empty release. Microsoft can create the worst interfaces known to man), if after importing something show in red fix it and if in the Artifacts stage the "Publish" points to "Module.Template" delete "Publish" and create it again pointing to your Project. (You can delete the `Tests\Azure Publish config.json` file). Then in the release configuration Variable tab add a "Secret" "Publish Stage" pipeline variable named "NugetApiKey" with your PowerShell Gallery Key.<BR />
-To publish click "Create a new release" and select the Build version containing the Artifact to use for the release.
+1. In Azure you can publish the module manually from an Artifacts. For this to work you need to configure a "Releases" in Azure, I didn't find a way to configure it in the .yml, but I exported it to json `Tests\Azure Publish config.json`, import it in [Azure](https://dev.azure.com) > Releases (You may need to create an empty releases, save it, view releases, New > Import and delete the empty release. Microsoft can create the worst interfaces known to man).<BR />
+After importing in the Artifacts stage "Artifacts" will point to "Module.Template" delete "Artifacts" and recreate it pointing to your Project, If something show in red fix it (For example in "Publish Job" if the OS is not set select "windows-2019"). Then in the release configuration Variable tab add a "Secret" "Publish Stage" pipeline variable named "NugetApiKey" with your PowerShell Gallery Key.<BR />
+To publish click "Create a new release" and select the Build version containing the Artifact to use for the release.<BR />
+(You can delete the `Tests\Azure Publish config.json` file)
 
-3. You can also run `Tests\Publish.ps1` locally with `-NugetApiKey <Key>`
+1. You can also run `Tests\Publish.ps1` locally with `-NugetApiKey <Key>`
+
+**Publish to Docker Hub** - You can also publish the Module to Docker Hub (Can be good for testing new builds). You can optionally modify the Docker build by editing `Tests\Dockerfile`.
+The steps are the same as the PowerShell Gallery publish. In Azure > Releases import `Tests\Azure Docker config.json`, Recreate "Artifacts" so it point to your Project, If something show in red fix it (Set the OS to Windows or Linux according to the OS configured in `Tests\Dockerfile`), You can delete the `Tests\Azure Docker config.json` file.
 
 ##  Changelog
 [CHANGELOG.md](https://github.com/ili101/Join-Object/blob/master/CHANGELOG.md)

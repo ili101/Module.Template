@@ -1,6 +1,6 @@
 {
     "source": 2,
-    "revision": 19,
+    "revision": 9,
     "description": null,
     "createdBy": {
         "displayName": "ili",
@@ -15,7 +15,7 @@
         "imageUrl": "https://dev.azure.com/ili101/_apis/GraphProfile/MemberAvatars/msa.M2M0NDgzMTctOTY5MS03N2IwLTlmYjctMzQyZTRhZjZkYjU3",
         "descriptor": "msa.M2M0NDgzMTctOTY5MS03N2IwLTlmYjctMzQyZTRhZjZkYjU3"
     },
-    "createdOn": "2019-07-21T21:26:10.720Z",
+    "createdOn": "2019-08-30T23:13:04.113Z",
     "modifiedBy": {
         "displayName": "ili",
         "url": "https://spsprodeus22.vssps.visualstudio.com/Aa3d25131-0723-4f6e-a46f-141ec06d04c1/_apis/Identities/db668509-d55a-4174-b91d-4bebed7d3c5d",
@@ -29,14 +29,14 @@
         "imageUrl": "https://dev.azure.com/ili101/_apis/GraphProfile/MemberAvatars/msa.M2M0NDgzMTctOTY5MS03N2IwLTlmYjctMzQyZTRhZjZkYjU3",
         "descriptor": "msa.M2M0NDgzMTctOTY5MS03N2IwLTlmYjctMzQyZTRhZjZkYjU3"
     },
-    "modifiedOn": "2019-08-31T01:09:17.003Z",
+    "modifiedOn": "2019-08-31T00:55:02.317Z",
     "isDeleted": false,
     "variables": {},
     "variableGroups": [],
     "environments": [
         {
-            "id": 1,
-            "name": "Publish Stage",
+            "id": 3,
+            "name": "Docker Stage",
             "rank": 1,
             "owner": {
                 "displayName": "ili",
@@ -51,12 +51,7 @@
                 "imageUrl": "https://dev.azure.com/ili101/_apis/GraphProfile/MemberAvatars/msa.M2M0NDgzMTctOTY5MS03N2IwLTlmYjctMzQyZTRhZjZkYjU3",
                 "descriptor": "msa.M2M0NDgzMTctOTY5MS03N2IwLTlmYjctMzQyZTRhZjZkYjU3"
             },
-            "variables": {
-                "NugetApiKey": {
-                    "value": null,
-                    "isSecret": true
-                }
-            },
+            "variables": {},
             "variableGroups": [],
             "preDeployApprovals": {
                 "approvals": [
@@ -64,7 +59,7 @@
                         "rank": 1,
                         "isAutomated": true,
                         "isNotificationOn": false,
-                        "id": 1
+                        "id": 7
                     }
                 ],
                 "approvalOptions": {
@@ -77,7 +72,7 @@
                 }
             },
             "deployStep": {
-                "id": 2
+                "id": 8
             },
             "postDeployApprovals": {
                 "approvals": [
@@ -85,7 +80,7 @@
                         "rank": 1,
                         "isAutomated": true,
                         "isNotificationOn": false,
-                        "id": 3
+                        "id": 9
                     }
                 ],
                 "approvalOptions": {
@@ -104,7 +99,7 @@
                             "parallelExecutionType": 0
                         },
                         "agentSpecification": {
-                            "identifier": "windows-2019"
+                            "identifier": "ubuntu-16.04"
                         },
                         "skipArtifactsDownload": false,
                         "artifactsDownloadInput": {
@@ -120,16 +115,14 @@
                     },
                     "rank": 1,
                     "phaseType": 1,
-                    "name": "Publish Job",
+                    "name": "Docker job",
                     "refName": null,
                     "workflowTasks": [
                         {
-                            "environment": {
-                                "NugetApiKey": "$(NugetApiKey)"
-                            },
-                            "taskId": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+                            "environment": {},
+                            "taskId": "e28912f1-0114-4464-802a-a3a35437fd16",
                             "version": "2.*",
-                            "name": "Publish Script",
+                            "name": "buildAndPush",
                             "refName": "",
                             "enabled": true,
                             "alwaysRun": false,
@@ -139,15 +132,14 @@
                             "overrideInputs": {},
                             "condition": "succeeded()",
                             "inputs": {
-                                "targetType": "filePath",
-                                "filePath": "$(System.DefaultWorkingDirectory)/Artifacts/Source/Tests/Publish.ps1",
-                                "arguments": "-Path \"$(System.DefaultWorkingDirectory)/Artifacts/Modules/*/\"",
-                                "script": "# Write your powershell commands here.\n\nWrite-Host \"Hello World\"\n\n# Use the environment variables input below to pass secret variables to this script.",
-                                "errorActionPreference": "stop",
-                                "failOnStderr": "false",
-                                "ignoreLASTEXITCODE": "false",
-                                "pwsh": "false",
-                                "workingDirectory": ""
+                                "containerRegistry": "dc04efc0-fd11-4dba-885e-34894c21398f",
+                                "repository": "ili101/$(System.TeamProject)",
+                                "command": "buildAndPush",
+                                "Dockerfile": "$(System.DefaultWorkingDirectory)/Artifacts/Source/Tests/Dockerfile",
+                                "buildContext": "$(System.DefaultWorkingDirectory)/Artifacts",
+                                "tags": "$(Build.BuildNumber)\nlatest",
+                                "arguments": "",
+                                "addPipelineData": "true"
                             }
                         }
                     ]
@@ -178,8 +170,8 @@
             },
             "schedules": [],
             "currentRelease": {
-                "id": 17,
-                "url": "https://vsrm.dev.azure.com/ili101/afc10f2e-f19f-495b-a00e-0032856cfac5/_apis/Release/releases/17",
+                "id": 16,
+                "url": "https://vsrm.dev.azure.com/ili101/afc10f2e-f19f-495b-a00e-0032856cfac5/_apis/Release/releases/16",
                 "_links": {}
             },
             "retentionPolicy": {
@@ -200,7 +192,7 @@
                 "gates": []
             },
             "environmentTriggers": [],
-            "badgeUrl": "https://vsrm.dev.azure.com/ili101/_apis/public/Release/badge/afc10f2e-f19f-495b-a00e-0032856cfac5/1/1"
+            "badgeUrl": "https://vsrm.dev.azure.com/ili101/_apis/public/Release/badge/afc10f2e-f19f-495b-a00e-0032856cfac5/2/3"
         }
     ],
     "artifacts": [
@@ -267,17 +259,17 @@
             "$value": "false"
         }
     },
-    "id": 1,
-    "name": "Publish",
+    "id": 2,
+    "name": "Docker",
     "path": "\\",
     "projectReference": null,
-    "url": "https://vsrm.dev.azure.com/ili101/afc10f2e-f19f-495b-a00e-0032856cfac5/_apis/Release/definitions/1",
+    "url": "https://vsrm.dev.azure.com/ili101/afc10f2e-f19f-495b-a00e-0032856cfac5/_apis/Release/definitions/2",
     "_links": {
         "self": {
-            "href": "https://vsrm.dev.azure.com/ili101/afc10f2e-f19f-495b-a00e-0032856cfac5/_apis/Release/definitions/1"
+            "href": "https://vsrm.dev.azure.com/ili101/afc10f2e-f19f-495b-a00e-0032856cfac5/_apis/Release/definitions/2"
         },
         "web": {
-            "href": "https://dev.azure.com/ili101/afc10f2e-f19f-495b-a00e-0032856cfac5/_release?definitionId=1"
+            "href": "https://dev.azure.com/ili101/afc10f2e-f19f-495b-a00e-0032856cfac5/_release?definitionId=2"
         }
     }
 }

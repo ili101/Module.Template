@@ -1,3 +1,7 @@
+## 2.0.3 - 2019/08/31
+### Added
+* Publish to Docker Hub.
+
 ## 2.0.2 - 2019/08/26
 ### Added
 * macOS support.
