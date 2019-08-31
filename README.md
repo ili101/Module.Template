@@ -63,7 +63,7 @@ To publish click "Create a new release" and select the Build version containing 
 The steps are the same as the PowerShell Gallery publish. In Azure > Releases import `Tests\Azure Docker config.json`, Recreate "Artifacts" so it point to your Project, If something show in red fix it (Set the OS to Windows or Linux according to the OS configured in `Tests\Dockerfile`), In "Docker Stage" > "buildAndPush" > "Container registry" set your Docker Hub credentials. You can delete the `Tests\Azure Docker config.json` file.
 
 ##  Changelog
-[CHANGELOG.md](https://github.com/ili101/Join-Object/blob/master/CHANGELOG.md)
+[CHANGELOG.md](https://github.com/ili101/Module.Template/blob/master/CHANGELOG.md)
 
 ## Contributing
 If you fund a bug or added functionality or anything else just fork and send pull requests. Thank you!
