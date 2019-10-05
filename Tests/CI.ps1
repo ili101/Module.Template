@@ -145,7 +145,12 @@ if ($Analyzer) {
         (Get-Item (Join-Path $TempGitClone '.git')).Attributes += 'Hidden'
         git -C $TempGitClone clean -f
         git -C $TempGitClone reset --hard
-        git -C $TempGitClone checkout master
+        try {
+            git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch
+        }
+        catch {
+            $_ | fl * -Force
+        }
 
         $DirsToProcess = @{ 'Pull Request' = $PWD ; $env:System_PullRequest_TargetBranch = $TempGitClone }
     }
