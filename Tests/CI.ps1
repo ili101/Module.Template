@@ -134,7 +134,7 @@ if ($Artifact) {
 }
 if ($Analyzer) {
     if (!(Get-Module -Name PSScriptAnalyzer -ListAvailable)) {
-        Install-Module -Name PSScriptAnalyzer
+        Install-Module -Name PSScriptAnalyzer -Force
     }
     $DirsToProcess = @($PWD)
     $AnalyzerResults = $DirsToProcess | ForEach-Object {
