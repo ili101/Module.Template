@@ -158,17 +158,20 @@ if ($Analyzer) {
         $DirsToProcess = @{ 'GitHub' = $PWD }
     }
 
+    "[Progress] Running Script Analyzer."
     $AnalyzerResults = $DirsToProcess.GetEnumerator() | ForEach-Object {
         $DirName = $_.Key
-        "[Progress] Running Script Analyzer on $DirName."
+        Write-Verbose "[Progress] Running Script Analyzer on $DirName."
         Invoke-ScriptAnalyzer -Path $_.Value -Recurse -ErrorAction SilentlyContinue |
         Add-Member -MemberType NoteProperty -Name Location -Value $DirName -PassThru
     }
 
     if ($AnalyzerResults) {
         if (!(Get-Module -Name ImportExcel -ListAvailable)) {
+            '[Progress] Installing ImportExcel.'
             Install-Module -Name ImportExcel -Force
         }
+        '[Progress] Creating ScriptAnalyzer.xlsx.'
         $ExcelParams = @{
             Path          = 'ScriptAnalyzer.xlsx'
             WorksheetName = 'FullResults'
@@ -190,7 +193,9 @@ if ($Analyzer) {
 
         $AnalyzerResults | Export-Excel @ExcelParams
     }
-    Write-Progress -Activity "Running Script Analyzer" -Completed
+    else {
+        "[Info] Invoke-ScriptAnalyzer didn't return any problems."
+    }
 }
 if ($ABC -ne $null) {
 
