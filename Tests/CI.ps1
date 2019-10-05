@@ -149,7 +149,7 @@ if ($Analyzer) {
             git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch
         }
         catch {
-            $_ | fl * -Force
+            '$_ | fl * -Force'
         }
 
         $DirsToProcess = @{ 'Pull Request' = $PWD ; $env:System_PullRequest_TargetBranch = $TempGitClone }
@@ -192,6 +192,7 @@ if ($Analyzer) {
         $ExcelParams['PivotTableDefinition'] = New-PivotTableDefinition @PivotParams
 
         $AnalyzerResults | Export-Excel @ExcelParams
+        '[Progress] Analyzer finished.'
     }
     else {
         "[Info] Invoke-ScriptAnalyzer didn't return any problems."
