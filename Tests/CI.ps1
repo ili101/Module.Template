@@ -162,7 +162,7 @@ if ($Analyzer) {
         "dir1"
         dir
         "dir1"
-        git clone https://github.com/ili101/Module.Template 
+        git clone https://github.com/ili101/Module.Template .
         
         & {
             [CmdletBinding()]
