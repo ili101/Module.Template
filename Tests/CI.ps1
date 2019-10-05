@@ -147,35 +147,14 @@ if ($Analyzer) {
         
         git -C $TempGitClone clean -f
         git -C $TempGitClone reset --hard
-       <#
-        try {
-            git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch
-        }
-        catch {
-            '$_ | fl * -Force'
-        }
-        
-        $cdo = $PWD
-        mkdir $TempGitClone
-        cd $TempGitClone
-        "PWD $PWD"
-        "dir1"
-        dir
-        "dir1"
-        git clone https://github.com/ili101/Module.Template .
-        #>
         & {
             [CmdletBinding()]
             param()
-
-            git -C $TempGitClone checkout master
+            git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch
         } -ErrorAction SilentlyContinue -ErrorVariable fail
-
         if ($fail) {
             $fail.Exception
         }
-
-        #cd $cdo
         
         $DirsToProcess = @{ 'Pull Request' = $PWD ; $env:System_PullRequest_TargetBranch = $TempGitClone }
     }
