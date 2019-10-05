@@ -148,6 +148,7 @@ if ($Analyzer) {
         git -C $TempGitClone clean -f
         "[Progress] git reset."
         git -C $TempGitClone reset --hard
+        <#
         & {
             [CmdletBinding()]
             param()
@@ -157,6 +158,15 @@ if ($Analyzer) {
         if ($fail) {
             "[Progress] git checkout error."
             $fail.Exception
+        }
+        #>
+        try {
+            "[Progress] git checkout."
+            git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch
+            'After'
+        }
+        catch {
+            'catch'
         }
         
         $DirsToProcess = @{ 'Pull Request' = $PWD ; $env:System_PullRequest_TargetBranch = $TempGitClone }
