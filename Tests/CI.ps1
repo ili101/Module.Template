@@ -141,9 +141,10 @@ if ($Analyzer) {
     if ($env:System_PullRequest_TargetBranch) {
         '[Progress] Get target branch.'
         $TempGitClone = Join-Path ([IO.Path]::GetTempPath()) (New-Guid)
+        <#
         Copy-Item -Path $PWD -Destination $TempGitClone -Recurse
         (Get-Item (Join-Path $TempGitClone '.git')).Attributes += 'Hidden'
-        <#
+        
         git -C $TempGitClone clean -f
         git -C $TempGitClone reset --hard
        
@@ -156,6 +157,10 @@ if ($Analyzer) {
         #>
         $cdo = $PWD
         cd $TempGitClone
+        "PWD $PWD"
+        "dir1"
+        dir
+        "dir1"
         git clone https://github.com/ili101/Module.Template .
         try {
             git checkout master
