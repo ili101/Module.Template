@@ -162,7 +162,10 @@ if ($Analyzer) {
         #>
         try {
             "[Progress] git checkout."
-            & { git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch }
+            & { 
+                [CmdletBinding()]
+                param()
+                git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch }
             'After'
         }
         catch {
