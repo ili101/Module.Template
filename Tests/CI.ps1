@@ -146,7 +146,7 @@ if ($Analyzer) {
 
     if ($AnalyzerResults) {
         if (!(Get-Module -Name ImportExcel -ListAvailable)) {
-            Install-Module -Name ImportExcel
+            Install-Module -Name ImportExcel -Force
         }
         $ExcelParams = @{
             Path          = 'ScriptAnalyzer.xlsx'
