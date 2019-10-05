@@ -143,10 +143,10 @@ if ($Analyzer) {
         $TempGitClone = Join-Path ([IO.Path]::GetTempPath()) (New-Guid)
         Copy-Item -Path $PWD -Destination $TempGitClone -Recurse
         (Get-Item (Join-Path $TempGitClone '.git')).Attributes += 'Hidden'
-        
+        <#
         git -C $TempGitClone clean -f
         git -C $TempGitClone reset --hard
-        <#
+       
         try {
             git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch
         }
@@ -154,6 +154,17 @@ if ($Analyzer) {
             '$_ | fl * -Force'
         }
         #>
+        $cdo = $PWD
+        cd $TempGitClone
+        git clone https://github.com/ili101/Module.Template .
+        try {
+            git checkout master
+        }
+        catch {
+            $_ | fl * -Force | out-string
+        }
+        cd $cdo
+        
         $DirsToProcess = @{ 'Pull Request' = $PWD ; $env:System_PullRequest_TargetBranch = $TempGitClone }
     }
     else {
