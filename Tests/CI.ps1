@@ -165,7 +165,7 @@ if ($Analyzer) {
             & { 
                 [CmdletBinding()]
                 param()
-                git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch }
+                git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch } -ErrorAction SilentlyContinue
             'After'
         }
         catch {
