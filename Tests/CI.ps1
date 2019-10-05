@@ -133,17 +133,29 @@ if ($Artifact) {
     }
 }
 if ($Analyzer) {
-    "Build_Repository_Uri {0}" -f ([System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($env:Build_Repository_Uri)))
-    "System_PullRequest_TargetBranch $env:System_PullRequest_TargetBranch"
-    "PWD $PWD"
     if (!(Get-Module -Name PSScriptAnalyzer -ListAvailable)) {
+        '[Progress] Installing PSScriptAnalyzer.'
         Install-Module -Name PSScriptAnalyzer -Force
     }
-    $DirsToProcess = @($PWD)
-    $AnalyzerResults = $DirsToProcess | ForEach-Object {
-        $DirName = (Resolve-Path -Path $_) -replace "^.*\\(.*?)\\(.*?)$", '$1-$2'
-        Write-Progress -Activity "Running Script Analyzer" -CurrentOperation $DirName
-        Invoke-ScriptAnalyzer -Path $_ -Recurse -ErrorAction SilentlyContinue |
+
+    if ($env:System_PullRequest_TargetBranch) {
+        '[Progress] Get target branch.'
+        $TempGitClone = Join-Path ([IO.Path]::GetTempPath()) (New-Guid)
+        Copy-Item -Path D:\ILI\Profile\Documents\GitHub\Forked\Module.Template -Destination $TempGitClone -Recurse
+        (Get-Item (Join-Path $TempGitClone '.git')).Attributes += 'Hidden'
+        git -C $TempGitClone clean -f
+        git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch
+
+        $DirsToProcess = @{ 'Pull Request' = $PWD ; $env:System_PullRequest_TargetBranch = $TempGitClone }
+    }
+    else {
+        $DirsToProcess = @{ 'GitHub' = $PWD }
+    }
+
+    $AnalyzerResults = $DirsToProcess.GetEnumerator() | ForEach-Object {
+        $DirName = $_.Key
+        "[Progress] Running Script Analyzer on $DirName."
+        Invoke-ScriptAnalyzer -Path $_.Value -Recurse -ErrorAction SilentlyContinue |
         Add-Member -MemberType NoteProperty -Name Location -Value $DirName -PassThru
     }
 
