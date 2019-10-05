@@ -133,7 +133,7 @@ if ($Artifact) {
     }
 }
 if ($Analyzer) {
-    "Build_Repository_Uri $env:Build_Repository_Uri"
+    "Build_Repository_Uri {0}" -f ([System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($env:Build_Repository_Uri)))
     "System_PullRequest_TargetBranch $env:System_PullRequest_TargetBranch"
     if (!(Get-Module -Name PSScriptAnalyzer -ListAvailable)) {
         Install-Module -Name PSScriptAnalyzer -Force
