@@ -144,15 +144,18 @@ if ($Analyzer) {
         
         Copy-Item -Path $PWD -Destination $TempGitClone -Recurse
         (Get-Item (Join-Path $TempGitClone '.git')).Attributes += 'Hidden'
-        
+        "[Progress] git clean."
         git -C $TempGitClone clean -f
+        "[Progress] git reset."
         git -C $TempGitClone reset --hard
         & {
             [CmdletBinding()]
             param()
+            "[Progress] git checkout."
             git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch
         } -ErrorAction SilentlyContinue -ErrorVariable fail
         if ($fail) {
+            "[Progress] git checkout error."
             $fail.Exception
         }
         
