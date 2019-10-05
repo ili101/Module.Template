@@ -141,7 +141,7 @@ if ($Analyzer) {
     if ($env:System_PullRequest_TargetBranch) {
         '[Progress] Get target branch.'
         $TempGitClone = Join-Path ([IO.Path]::GetTempPath()) (New-Guid)
-        Copy-Item -Path D:\ILI\Profile\Documents\GitHub\Forked\Module.Template -Destination $TempGitClone -Recurse
+        Copy-Item -Path $PWD -Destination $TempGitClone -Recurse
         (Get-Item (Join-Path $TempGitClone '.git')).Attributes += 'Hidden'
         git -C $TempGitClone clean -f
         git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch
