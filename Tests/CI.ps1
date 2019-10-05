@@ -156,6 +156,7 @@ if ($Analyzer) {
         }
         #>
         $cdo = $PWD
+        mkdir $TempGitClone
         cd $TempGitClone
         "PWD $PWD"
         "dir1"
