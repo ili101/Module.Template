@@ -162,13 +162,19 @@ if ($Analyzer) {
         "dir1"
         dir
         "dir1"
-        git clone https://github.com/ili101/Module.Template .
-        try {
+        git clone https://github.com/ili101/Module.Template 
+        
+        & {
+            [CmdletBinding()]
+            param()
+
             git checkout master
+        } -ErrorAction SilentlyContinue -ErrorVariable fail
+
+        if ($fail) {
+            $fail.Exception
         }
-        catch {
-            $_ | fl * -Force | out-string
-        }
+
         cd $cdo
         
         $DirsToProcess = @{ 'Pull Request' = $PWD ; $env:System_PullRequest_TargetBranch = $TempGitClone }
