@@ -141,20 +141,20 @@ if ($Analyzer) {
     if ($env:System_PullRequest_TargetBranch) {
         '[Progress] Get target branch.'
         $TempGitClone = Join-Path ([IO.Path]::GetTempPath()) (New-Guid)
-        <#
+        
         Copy-Item -Path $PWD -Destination $TempGitClone -Recurse
         (Get-Item (Join-Path $TempGitClone '.git')).Attributes += 'Hidden'
         
         git -C $TempGitClone clean -f
         git -C $TempGitClone reset --hard
-       
+       <#
         try {
             git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch
         }
         catch {
             '$_ | fl * -Force'
         }
-        #>
+        
         $cdo = $PWD
         mkdir $TempGitClone
         cd $TempGitClone
@@ -163,19 +163,19 @@ if ($Analyzer) {
         dir
         "dir1"
         git clone https://github.com/ili101/Module.Template .
-        
+        #>
         & {
             [CmdletBinding()]
             param()
 
-            git checkout master
+            git -C $TempGitClone checkout master
         } -ErrorAction SilentlyContinue -ErrorVariable fail
 
         if ($fail) {
             $fail.Exception
         }
 
-        cd $cdo
+        #cd $cdo
         
         $DirsToProcess = @{ 'Pull Request' = $PWD ; $env:System_PullRequest_TargetBranch = $TempGitClone }
     }
