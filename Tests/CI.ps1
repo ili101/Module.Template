@@ -11,7 +11,9 @@ param
     # AppVeyor Only - Upload results to AppVeyor "Tests" tab.
     [Switch]$Finalize,
     # AppVeyor and Azure - Upload module as AppVeyor Artifact.
-    [Switch]$Artifact
+    [Switch]$Artifact,
+    # Azure - Runs PsScriptAnalyzer against one or more folders and pivots the results to form a report.
+    [Switch]$Analyzer
 )
 $ErrorActionPreference = 'Stop'
 if ($Initialize) {
@@ -129,4 +131,43 @@ if ($Artifact) {
         #Write-Host "##vso[task.setvariable variable=ModuleName]$ModuleName"
         Copy-Item -Path $ModulePath -Destination $env:Build_ArtifactStagingDirectory -Recurse
     }
+}
+if ($Analyzer) {
+    $DirsToProcess = @($PWD)
+    $AnalyzerResults = $DirsToProcess | ForEach-Object {
+        $DirName = (Resolve-Path -Path $_) -replace "^.*\\(.*?)\\(.*?)$", '$1-$2'
+        Write-Progress -Activity "Running Script Analyzer" -CurrentOperation $DirName
+        Invoke-ScriptAnalyzer -Path $_ -Recurse -ErrorAction SilentlyContinue |
+        Add-Member -MemberType NoteProperty -Name Location -Value $DirName -PassThru
+    }
+
+    if ($AnalyzerResults) {
+        if (!(Get-Module -Name ImportExcel -ListAvailable)) {
+            Install-Module -Name ImportExcel
+        }
+        $ExcelParams = @{
+            Path          = 'ScriptAnalyzer.xlsx'
+            WorksheetName = 'FullResults'
+            Now           = $true
+            Activate      = $true
+            Show          = $false
+        }
+        $PivotParams = @{
+            PivotTableName = 'BreakDown'
+            PivotData      = @{RuleName = 'Count' }
+            PivotRows      = 'Severity', 'RuleName'
+            PivotColumns   = 'Location'
+            PivotTotals    = 'Rows'
+        }
+        Remove-Item -Path $ExcelParams['Path'] -ErrorAction SilentlyContinue
+
+        $PivotParams['PivotChartDefinition'] = New-ExcelChartDefinition -ChartType 'BarClustered' -Column (1 + $DirsToProcess.Count) -Title "Script analysis" -LegendBold
+        $ExcelParams['PivotTableDefinition'] = New-PivotTableDefinition @PivotParams
+
+        $AnalyzerResults | Export-Excel @ExcelParams
+    }
+    Write-Progress -Activity "Running Script Analyzer" -Completed
+}
+if ($ABC -ne $null) {
+
 }
