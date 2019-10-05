@@ -2,6 +2,7 @@
     .SYNOPSIS
     Handel Continuous Integration Testing in AppVeyor and Azure DevOps Pipelines.
 #>
+[CmdletBinding()]
 param
 (
     # AppVeyor Only - Update AppVeyor build name.
@@ -15,7 +16,7 @@ param
     # Azure - Runs PsScriptAnalyzer against one or more folders and pivots the results to form a report.
     [Switch]$Analyzer
 )
-$ErrorActionPreference = 'Stop'
+#$ErrorActionPreference = 'Stop'
 if ($Initialize) {
     $Psd1 = (Get-ChildItem -File -Filter *.psd1 -Name -Path (Split-Path $PSScriptRoot)).PSPath
     $ModuleVersion = (. ([Scriptblock]::Create((Get-Content -Path $Psd1 | Out-String)))).ModuleVersion
