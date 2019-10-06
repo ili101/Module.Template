@@ -196,9 +196,3 @@ if ($Analyzer) {
         "[Info] Invoke-ScriptAnalyzer didn't return any problems."
     }
 }
-if ($ABC -ne $null) {
-
-}
-if ($ABCD -ne $null) {
-
-}
