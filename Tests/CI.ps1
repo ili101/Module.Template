@@ -162,7 +162,7 @@ if ($Analyzer) {
         #>
         try {
             "[Progress] git checkout."
-            Invoke-Command -ScriptBlock { git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch } -ErrorAction SilentlyContinue
+            git -C $TempGitClone checkout -q $env:System_PullRequest_TargetBranch
             'After'
         }
         catch {
