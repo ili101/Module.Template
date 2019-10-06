@@ -134,20 +134,42 @@ if ($Artifact) {
 }
 if ($Analyzer) {
     if (!(Get-Module -Name PSScriptAnalyzer -ListAvailable)) {
+        '[Progress] Installing PSScriptAnalyzer.'
         Install-Module -Name PSScriptAnalyzer -Force
     }
-    $DirsToProcess = @($PWD)
-    $AnalyzerResults = $DirsToProcess | ForEach-Object {
-        $DirName = (Resolve-Path -Path $_) -replace "^.*\\(.*?)\\(.*?)$", '$1-$2'
-        Write-Progress -Activity "Running Script Analyzer" -CurrentOperation $DirName
-        Invoke-ScriptAnalyzer -Path $_ -Recurse -ErrorAction SilentlyContinue |
+
+    if ($env:System_PullRequest_TargetBranch) {
+        '[Progress] Get target branch.'
+        $TempGitClone = Join-Path ([IO.Path]::GetTempPath()) (New-Guid)
+        Copy-Item -Path $PWD -Destination $TempGitClone -Recurse
+        (Get-Item (Join-Path $TempGitClone '.git')).Attributes += 'Hidden'
+        "[Progress] git clean."
+        git -C $TempGitClone clean -f
+        "[Progress] git reset."
+        git -C $TempGitClone reset --hard
+        "[Progress] git checkout."
+        git -C $TempGitClone checkout -q $env:System_PullRequest_TargetBranch
+
+        $DirsToProcess = @{ 'Pull Request' = $PWD ; $env:System_PullRequest_TargetBranch = $TempGitClone }
+    }
+    else {
+        $DirsToProcess = @{ 'GitHub' = $PWD }
+    }
+
+    "[Progress] Running Script Analyzer."
+    $AnalyzerResults = $DirsToProcess.GetEnumerator() | ForEach-Object {
+        $DirName = $_.Key
+        Write-Verbose "[Progress] Running Script Analyzer on $DirName."
+        Invoke-ScriptAnalyzer -Path $_.Value -Recurse -ErrorAction SilentlyContinue |
         Add-Member -MemberType NoteProperty -Name Location -Value $DirName -PassThru
     }
 
     if ($AnalyzerResults) {
         if (!(Get-Module -Name ImportExcel -ListAvailable)) {
+            '[Progress] Installing ImportExcel.'
             Install-Module -Name ImportExcel -Force
         }
+        '[Progress] Creating ScriptAnalyzer.xlsx.'
         $ExcelParams = @{
             Path          = 'ScriptAnalyzer.xlsx'
             WorksheetName = 'FullResults'
@@ -168,9 +190,15 @@ if ($Analyzer) {
         $ExcelParams['PivotTableDefinition'] = New-PivotTableDefinition @PivotParams
 
         $AnalyzerResults | Export-Excel @ExcelParams
+        '[Progress] Analyzer finished.'
     }
-    Write-Progress -Activity "Running Script Analyzer" -Completed
+    else {
+        "[Info] Invoke-ScriptAnalyzer didn't return any problems."
+    }
 }
 if ($ABC -ne $null) {
+
+}
+if ($ABCD -ne $null) {
 
 }
