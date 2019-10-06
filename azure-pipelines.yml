@@ -37,6 +37,8 @@ jobs:
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)'
         artifact: 'Modules'
+    - powershell: './Tests/CI.ps1 -Analyzer'
+      displayName: 'Invoke ScriptAnalyzer'
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: '$(Build.SourcesDirectory)'
