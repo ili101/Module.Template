@@ -141,34 +141,15 @@ if ($Analyzer) {
     if ($env:System_PullRequest_TargetBranch) {
         '[Progress] Get target branch.'
         $TempGitClone = Join-Path ([IO.Path]::GetTempPath()) (New-Guid)
-        
         Copy-Item -Path $PWD -Destination $TempGitClone -Recurse
         (Get-Item (Join-Path $TempGitClone '.git')).Attributes += 'Hidden'
         "[Progress] git clean."
         git -C $TempGitClone clean -f
         "[Progress] git reset."
         git -C $TempGitClone reset --hard
-        <#
-        & {
-            [CmdletBinding()]
-            param()
-            "[Progress] git checkout."
-            git -C $TempGitClone checkout $env:System_PullRequest_TargetBranch
-        } -ErrorAction SilentlyContinue -ErrorVariable fail
-        if ($fail) {
-            "[Progress] git checkout error."
-            $fail.Exception
-        }
-        #>
-        try {
-            "[Progress] git checkout."
-            git -C $TempGitClone checkout -q $env:System_PullRequest_TargetBranch
-            'After'
-        }
-        catch {
-            'catch'
-        }
-        
+        "[Progress] git checkout."
+        git -C $TempGitClone checkout -q $env:System_PullRequest_TargetBranch
+
         $DirsToProcess = @{ 'Pull Request' = $PWD ; $env:System_PullRequest_TargetBranch = $TempGitClone }
     }
     else {
