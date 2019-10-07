@@ -140,7 +140,7 @@
                             "condition": "succeeded()",
                             "inputs": {
                                 "targetType": "filePath",
-                                "filePath": "$(System.DefaultWorkingDirectory)/Artifacts/Source/Tests/Publish.ps1",
+                                "filePath": "$(System.DefaultWorkingDirectory)/Artifacts/Source/CI/Publish.ps1",
                                 "arguments": "-Path \"$(System.DefaultWorkingDirectory)/Artifacts/Modules/*/\"",
                                 "script": "# Write your powershell commands here.\n\nWrite-Host \"Hello World\"\n\n# Use the environment variables input below to pass secret variables to this script.",
                                 "errorActionPreference": "stop",
