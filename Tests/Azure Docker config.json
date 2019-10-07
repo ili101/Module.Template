@@ -135,7 +135,7 @@
                                 "containerRegistry": "dc04efc0-fd11-4dba-885e-34894c21398f",
                                 "repository": "ili101/$(System.TeamProject)",
                                 "command": "buildAndPush",
-                                "Dockerfile": "$(System.DefaultWorkingDirectory)/Artifacts/Source/Tests/Dockerfile",
+                                "Dockerfile": "$(System.DefaultWorkingDirectory)/Artifacts/Source/CI/Dockerfile",
                                 "buildContext": "$(System.DefaultWorkingDirectory)/Artifacts",
                                 "tags": "$(Build.BuildNumber)\nlatest",
                                 "arguments": "",
