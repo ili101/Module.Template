@@ -27,8 +27,8 @@ $Uri = 'https://raw.githubusercontent.com/ili101/Module.Template/master/Install.
 ### Setup
 1. Create a GitHub Repository (Recommended name is the name of the Module) and clone the repository with VSCode.
 2. Clone or download this repository and copy the files to your repository clone.
-3. Remove/Replace/Edit/Rename the files `Module.Template.psm1`, `Module.Template.psm1`, `Test-Q.ps1`, `Class.ps1` with your module files.
-4. Remove/Replace/Edit/Rename the file `Tests\Test-Q.Tests.ps1` with tests for your Module, you can create multiple test files in the folder ending with **.Tests.ps1**.
+3. Remove/Replace/Edit/Rename the files `Module.Template.psm1`, `Module.Template.psm1`, `Invoke-ExampleCommand.ps1`, `Class.ps1` with your module files.
+4. Remove/Replace/Edit/Rename the file `Tests\Invoke-ExampleCommand.Tests.ps1` with tests for your Module, you can create multiple test files in the folder ending with **.Tests.ps1**.
 5. Edit `README.md`, `CHANGELOG.md` and the `Examples` folder to provide documentation for the Module.
 6. `Install.ps1` is used to "build" the module and put it in the PowerShell Modules folder, adjust the `$IncludeFiles` and `$ExcludeFiles` variables if needed to configure which files and folders to copy from the source root folder. Can be used locally by executing `Install.ps1` or remotely from GitHub by the Install command mentiond in the `README.md`. (Also used in the CI procedure).
 7. To use AppVeyor create an account on https://www.appveyor.com/ and connect it to the GitHub repository, the `appveyor.yml` file is used for the configuration.
@@ -62,19 +62,23 @@ To publish click "Create a new release" and select the Build version containing 
 **Publish to Docker Hub** - You can also publish the Module to Docker Hub (Can be good for testing new builds). You can optionally modify the Docker build by editing `CI\Dockerfile`.
 The steps are the same as the PowerShell Gallery publish. In Azure > Releases import `CI\Azure Docker config.json`, Recreate "Artifacts" so it point to your Project, If something show in red fix it (Set the OS to Windows or Linux according to the OS configured in `CI\Dockerfile`), In "Docker Stage" > "buildAndPush" > "Container registry" set your Docker Hub credentials. You can delete the `CI\Azure Docker config.json` file.
 
+**ScriptAnalyzer** - A ScriptAnalyzer report is generated and saved in Azure Pipelines > Artifacts > Source > `ScriptAnalyzer.xlsx`. In a PR the report will include the PR analysis and the target branch analysis.<BR />
+To disable this comment out the `- powershell: './CI/CI.ps1 -Analyzer'` section in the Azure yaml.
+
 ##  Changelog
 [CHANGELOG.md](https://github.com/ili101/Module.Template/blob/master/CHANGELOG.md)
 
 ## Contributing
-If you fund a bug or added functionality or anything else just fork and send pull requests. Thank you!
+If you fund a bug or added functionality or anything else just fork and send pull requests. Thank you!<BR />
+Ideas for new functionality and feature requests are welcomed, you can post your ideas in the "Issues" section.
 
 ## To do
 * Noting for now, You can open an Issues if something is needed.
 
 ## Examples
-[Test-Q.Examples.ps1](https://github.com/ili101/Module.Template/blob/master/Examples/Test-Q.Examples.ps1)
+[Invoke-ExampleCommand.Examples.ps1](https://github.com/ili101/Module.Template/blob/master/Examples/Invoke-ExampleCommand.Examples.ps1)
 ```PowerShell
-Test-Q
+Invoke-ExampleCommand
 ```
 
 ![](https://raw.githubusercontent.com/ili101/Module.Template/master/Examples/Example1.png)

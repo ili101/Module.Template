@@ -12,7 +12,7 @@
     RootModule        = 'Module.Template.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2.0.3'
+    ModuleVersion     = '2.0.4'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -73,7 +73,7 @@ For instructions see https://github.com/ili101/Module.Template/blob/master/READM
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = 'Test-Q'
+    FunctionsToExport = 'Invoke-ExampleCommand'
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport   = @()
@@ -99,7 +99,7 @@ For instructions see https://github.com/ili101/Module.Template/blob/master/READM
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags         = @('Module', 'Template', 'GitHub', 'PowerShellGallery', 'Gallery', 'AppVeyor', 'Azure', 'DevOps', 'Pipelines')
+            Tags         = @('Module', 'Template', 'GitHub', 'PowerShellGallery', 'Gallery', 'AppVeyor', 'Azure', 'DevOps', 'Pipelines', 'Build', 'ScriptAnalyzer')
 
             # A URL to the license for this module.
             # LicenseUri = ''
