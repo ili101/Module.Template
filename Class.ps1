@@ -1,14 +1,11 @@
-class Base64Script
-{
+class PublicClass {
     [string]$ItemName
 
-    Base64Script([string]$String)
-    {
+    PublicClass([string]$String) {
         $this.ItemName = $String
     }
 
-    [string]ToString()
-    {
+    [string]ToString() {
         return $this.ItemName
     }
 }

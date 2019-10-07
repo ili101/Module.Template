@@ -1,3 +1,12 @@
+## 2.0.4 - 2019/10/07
+### Added
+* A ScriptAnalyzer report is generated and saved as `ScriptAnalyzer.xlsx` in Azure Source Artifact.
+### Changes
+* Move files from Test folder to CI.
+### Cleanup
+* `Test-Q` replaced with `Invoke-ExampleCommand`
+* Class Examples Cleanup.
+
 ## 2.0.3 - 2019/08/31
 ### Added
 * Publish to Docker Hub.

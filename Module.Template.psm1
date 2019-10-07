@@ -1,8 +1,8 @@
 #<# Need "Using module Module.Template" to work
-class Base64 {
+class ExampleClass {
     [string]$ItemName
 
-    Base64([string]$String) {
+    ExampleClass([string]$String) {
         $this.ItemName = $String
     }
 
